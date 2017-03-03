@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Anime Note</title>
+</head>
+<body>
+	<form th:object="${anime}" th:action="@{/save/anime}" method="post">
+		<div th:if="${#fields.hasAnyErrors()}">
+	        <div th:each="detailedError : ${#fields.detailedErrors()}">
+	            <span th:text="${detailedError.message}"></span>
+	        </div>
+	    </div>
+		<div>
+			<label for="name">Nome:</label>
+			<input type="text" th:field="*{name}" id="name" />
+			<span th:text="${#fields.hasErrors('name')}"></span>
+			
+			<span th:errors="*{name}"></span>
+		</div>
+		
+		<div>
+			<label for="creator">Criador:</label>
+			<input type="text" th:field="*{creator}" id="creator" />
+			<span th:text="${#fields.hasErrors('creator')}"></span>
+			<span th:errors="*{creator}"></span>
+		</div>
+		
+		<div>
+			<label for="release-year">Ano de Lançamento:</label>
+			<input type="text" th:field="*{releaseYear}" id="release-year" />
+			<span th:text="${#fields.hasErrors('releaseYear')}"></span>
+			<span th:errors="*{releaseYear}"></span>
+		</div>
+		
+		<button type="submit">Cadastrar</button>
+	</form>
+</body>
+</html>

@@ -6,6 +6,8 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,6 +17,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
 import javax.validation.Valid;
+
+import br.com.animenote.constants.Status;
 
 @Entity(name = "tb_anime")
 public class Anime implements Serializable {
@@ -52,12 +56,16 @@ public class Anime implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL, optional = false, fetch = FetchType.EAGER, orphanRemoval = true)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+	
+	@Column(nullable = false, length = 1, columnDefinition = "enum('A', 'I') default 'I'")
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 
@@ -93,4 +101,36 @@ public class Anime implements Serializable {
 		this.episodeNumbers = episodeNumbers;
 	}
 
+	public List<AnimeCategory> getAnimeCategory() {
+		return animeCategory;
+	}
+
+	public void setAnimeCategory(List<AnimeCategory> animeCategory) {
+		this.animeCategory = animeCategory;
+	}
+
+	public List<AnimeCreator> getAnimeCreator() {
+		return animeCreator;
+	}
+
+	public void setAnimeCreator(List<AnimeCreator> animeCreator) {
+		this.animeCreator = animeCreator;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
+	}
+	
 }

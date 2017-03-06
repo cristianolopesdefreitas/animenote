@@ -5,9 +5,13 @@ import java.sql.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import br.com.animenote.constants.Status;
 
 @Entity(name = "tb_user")
 public class User implements Serializable {
@@ -34,6 +38,10 @@ public class User implements Serializable {
 	
 	@Column(nullable = true)
 	private String about;
+	
+	@Column(nullable = false, length = 1, columnDefinition = "enum('A', 'I') default 'I'")
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 	public Long getId() {
 		return id;
@@ -89,6 +97,14 @@ public class User implements Serializable {
 
 	public void setAbout(String about) {
 		this.about = about;
+	}
+
+	public Status getStatus() {
+		return status;
+	}
+
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 	
 }

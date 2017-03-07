@@ -2,6 +2,7 @@ package br.com.animenote.model;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,10 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.Transient;
 
 import br.com.animenote.constants.Status;
 
@@ -30,6 +35,9 @@ public class User implements Serializable {
 	@Column(nullable = false, length = 50)
 	private String password;
 	
+	@Transient
+	private String confirmPassword;
+	
 	@Column(nullable = true, length = 50)
 	private String avatar;
 	
@@ -38,6 +46,11 @@ public class User implements Serializable {
 	
 	@Column(nullable = true)
 	private String about;
+	
+	@ManyToMany
+	@JoinTable(name = "tb_user_role", joinColumns = {
+			@JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+	private Set<Role> roles;
 	
 	@Column(nullable = false, length = 1, columnDefinition = "enum('A', 'I') default 'I'")
 	@Enumerated(EnumType.STRING)
@@ -105,6 +118,22 @@ public class User implements Serializable {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public String getConfirmPassword() {
+		return confirmPassword;
+	}
+
+	public void setConfirmPassword(String confirmPassword) {
+		this.confirmPassword = confirmPassword;
+	}
+
+	public Set<Role> getRoles() {
+		return roles;
+	}
+
+	public void setRoles(Set<Role> roles) {
+		this.roles = roles;
 	}
 	
 }

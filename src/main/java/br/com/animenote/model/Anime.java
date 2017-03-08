@@ -57,7 +57,7 @@ public class Anime implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 	
-	@Column(nullable = false, length = 1, columnDefinition = "enum('A', 'I') default 'I'")
+	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'I'")
 	@Enumerated(EnumType.STRING)
 	private Status status;
 

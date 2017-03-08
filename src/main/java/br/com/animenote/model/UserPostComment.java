@@ -35,7 +35,7 @@ public class UserPostComment implements Serializable {
     @JoinColumn(name = "post_id", nullable = false)
     private UserPost post;
 	
-	@Column(nullable = false, length = 1, columnDefinition = "enum('A', 'I') default 'A'")
+	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'A'")
 	@Enumerated(EnumType.STRING)
 	private Status status;
 

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8" />
+	<title>Cadastro de Usuário</title>
+</head>
+<body>
+	<form th:object="${user}" th:action="@{/user-registration}" method="post">
+		<div th:if="${#fields.hasAnyErrors()}">
+	        <div th:each="detailedError : ${#fields.detailedErrors()}">
+	            <span th:text="${detailedError.message}"></span>
+	        </div>
+	    </div>
+		<div>
+			<label for="name">Nome:</label>
+			<input type="text" th:field="*{name}" id="name" />
+			<span th:text="${#fields.hasErrors('name')}"></span>
+			
+			<span th:errors="*{name}"></span>
+		</div>
+		
+		<div>
+			<label for="email">E-mail:</label>
+			<input type="text" th:field="*{email}" id="email" />
+			<span th:text="${#fields.hasErrors('email')}"></span>
+			<span th:errors="*{email}"></span>
+		</div>
+		
+		<div>
+			<label for="password">Senha:</label>
+			<input type="text" th:field="*{password}" id="password" />
+			<span th:text="${#fields.hasErrors('password')}"></span>
+			<span th:errors="*{password}"></span>
+		</div>
+		
+		<div>
+			<label for="passwordConfimation">Confirmação de senha:</label>
+			<input type="text" th:field="*{passwordConfimation}" id="passwordConfimation" />
+			<span th:text="${#fields.hasErrors('passwordConfimation')}"></span>
+			<span th:errors="*{passwordConfimation}"></span>
+		</div>
+		
+		<button type="submit">Cadastrar</button>
+	</form>
+</body>
+</html>

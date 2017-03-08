@@ -31,7 +31,7 @@ public class UserPost implements Serializable {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 	
-	@Column(nullable = false, length = 1, columnDefinition = "enum('A', 'I') default 'A'")
+	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'A'")
 	@Enumerated(EnumType.STRING)
 	private Status status;
 

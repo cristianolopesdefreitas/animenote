@@ -36,7 +36,7 @@ public class User implements Serializable {
 	private String password;
 	
 	@Transient
-	private String confirmPassword;
+	private String passwordConfirmation;
 	
 	@Column(nullable = true, length = 50)
 	private String avatar;
@@ -52,7 +52,7 @@ public class User implements Serializable {
 			@JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
 	private Set<Role> roles;
 	
-	@Column(nullable = false, length = 1, columnDefinition = "enum('A', 'I') default 'I'")
+	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'I'")
 	@Enumerated(EnumType.STRING)
 	private Status status;
 
@@ -120,20 +120,20 @@ public class User implements Serializable {
 		this.status = status;
 	}
 
-	public String getConfirmPassword() {
-		return confirmPassword;
-	}
-
-	public void setConfirmPassword(String confirmPassword) {
-		this.confirmPassword = confirmPassword;
-	}
-
 	public Set<Role> getRoles() {
 		return roles;
 	}
 
 	public void setRoles(Set<Role> roles) {
 		this.roles = roles;
+	}
+
+	public String getPasswordConfirmation() {
+		return passwordConfirmation;
+	}
+
+	public void setPasswordConfirmation(String passwordConfirmation) {
+		this.passwordConfirmation = passwordConfirmation;
 	}
 	
 }

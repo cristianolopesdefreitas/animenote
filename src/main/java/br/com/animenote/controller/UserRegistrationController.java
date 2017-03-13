@@ -11,11 +11,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import br.com.animenote.model.User;
 import br.com.animenote.service.UserService;
+import br.com.animenote.service.auth.SecurityService;
+import br.com.animenote.service.auth.UserValidator;
 
 @Controller
 public class UserRegistrationController {
 	@Autowired
-	private UserService service;
+	private UserService userService;
+	
+	@Autowired
+    private SecurityService securityService;
+
+    @Autowired
+    private UserValidator userValidator;
 	
 	@GetMapping("/user-registration")
 	public String userRegistration(User user, Model model) {
@@ -26,17 +34,17 @@ public class UserRegistrationController {
 
 	@PostMapping("/user-registration")
 	public String save(@Valid User user, BindingResult result, Model model) {
+		userValidator.validate(user, result);
+		
 		if (result.hasErrors()) {
 			return this.userRegistration(user, model);
 		}
 		
-		service.saveAndFlush(user);
+		userService.saveAndFlush(user);
 		
-		return "redirect:/user-successfully-registered";
+		securityService.autologin(user.getUsername(), user.getPasswordConfirmation());
+		
+		return "redirect:/";
 	}
 	
-	@GetMapping("/user-successfully-registered")
-	public String success() {
-		return "user-successfully-registered";
-	}
 }

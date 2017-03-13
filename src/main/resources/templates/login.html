@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Anime Note - Login</title>
+</head>
+<body>
+	<form th:action="@{/login}" method="post">
+		<span th:text="${error}"></span>
+		<span th:text="${message}"></span>
+		<div>
+			<label for="username">Usuário:</label>
+			<input type="text" name="username" id="username" maxlength="50" />
+		</div>
+
+		<div>
+			<label for="password">Senha:</label>
+			<input type="password" name="password" id="password" />
+		</div>
+
+		<button type="submit">Entrar</button>
+	</form>
+</body>
+</html>

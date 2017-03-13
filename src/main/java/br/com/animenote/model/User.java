@@ -16,7 +16,6 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
@@ -29,7 +28,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public User() {
-		this.status = Status.I;
+		this.status = Status.A;
 	}
 
 	@Id
@@ -44,20 +43,24 @@ public class User implements Serializable {
 	
 	@NotBlank
 	@Email
-	@Size(min = 3, max = 50)
+	@Size(max = 50)
 	@Valid
 	@Column(nullable = false, length = 50)
 	private String email;
 	
 	@NotBlank
-	@Size(min = 8)
+	@Size(min = 6, max = 50)
 	@Valid
-	@Column(nullable = false, length = 50)
-	private String password;
+	@Column(nullable = false, length = 32)
+	private String username;
 	
 	@NotBlank
 	@Size(min = 8)
 	@Valid
+	@Column(nullable = false, length = 60)
+	private String password;
+	
+	@NotBlank
 	@Transient
 	private String passwordConfirmation;
 
@@ -103,12 +106,28 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
+	public String getUsername() {
+		return username;
+	}
+
+	public void setUsername(String username) {
+		this.username = username;
+	}
+
 	public String getPassword() {
 		return password;
 	}
 
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public String getPasswordConfirmation() {
+		return passwordConfirmation;
+	}
+
+	public void setPasswordConfirmation(String passwordConfirmation) {
+		this.passwordConfirmation = passwordConfirmation;
 	}
 
 	public String getAvatar() {
@@ -135,14 +154,6 @@ public class User implements Serializable {
 		this.about = about;
 	}
 
-	public Status getStatus() {
-		return status;
-	}
-
-	public void setStatus(Status status) {
-		this.status = status;
-	}
-
 	public Set<Role> getRoles() {
 		return roles;
 	}
@@ -151,12 +162,12 @@ public class User implements Serializable {
 		this.roles = roles;
 	}
 
-	public String getPasswordConfirmation() {
-		return passwordConfirmation;
+	public Status getStatus() {
+		return status;
 	}
 
-	public void setPasswordConfirmation(String passwordConfirmation) {
-		this.passwordConfirmation = passwordConfirmation;
+	public void setStatus(Status status) {
+		this.status = status;
 	}
 
 }

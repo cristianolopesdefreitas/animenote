@@ -17,29 +17,25 @@
 		<div>
 			<label for="email">E-mail:</label>
 			<input type="text" th:field="*{email}" id="email" />
-			<span th:text="${#fields.hasErrors('email')}"></span>
-			<span th:errors="*{email}"></span>
+			<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+		</div>
+		
+		<div>
+			<label for="username">Usuário:</label>
+			<input type="text" th:field="*{username}" id="username" maxlength="50" />
+			<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
 		</div>
 
 		<div>
 			<label for="password">Senha:</label>
 			<input type="password" th:field="*{password}" id="password" />
-			<span th:text="${#fields.hasErrors('password')}"></span>
-			<span th:errors="*{password}"></span>
+			<span th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
 		</div>
 
 		<div>
 			<label for="passwordConfirmation">Confirmação de senha:</label>
 			<input type="password" th:field="*{passwordConfirmation}" id="passwordConfirmation" />
-			<span th:text="${#fields.hasErrors('passwordConfirmation')}"></span>
-			<span th:errors="*{passwordConfirmation}"></span>
-		</div>
-
-		<div>
-			<label for="status">Status:</label>
-			<input type="text" th:field="*{status}" id="status" />
-			<span th:text="${#fields.hasErrors('status')}"></span>
-			<span th:errors="*{status}"></span>
+			<span th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}"></span>
 		</div>
 
 		<button type="submit">Cadastrar</button>

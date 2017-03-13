@@ -15,43 +15,66 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.Transient;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 
 import br.com.animenote.constants.Status;
 
 @Entity(name = "tb_user")
 public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+
+	public User() {
+		this.status = Status.I;
+	}
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	
+	@NotBlank
+	@Size(min = 3, max = 50)
+	@Valid
 	@Column(nullable = false, length = 50)
 	private String name;
 	
+	@NotBlank
+	@Email
+	@Size(min = 3, max = 50)
+	@Valid
 	@Column(nullable = false, length = 50)
 	private String email;
 	
+	@NotBlank
+	@Size(min = 8)
+	@Valid
 	@Column(nullable = false, length = 50)
 	private String password;
 	
+	@NotBlank
+	@Size(min = 8)
+	@Valid
 	@Transient
 	private String passwordConfirmation;
-	
+
 	@Column(nullable = true, length = 50)
 	private String avatar;
-	
+
 	@Column(nullable = true)
 	private Date birthDate;
-	
+
 	@Column(nullable = true)
 	private String about;
-	
+
 	@ManyToMany
-	@JoinTable(name = "tb_user_role", joinColumns = {
-			@JoinColumn(name = "user_id") }, inverseJoinColumns = { @JoinColumn(name = "role_id") })
+	@JoinTable(name = "tb_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "role_id") })
 	private Set<Role> roles;
-	
+
 	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'I'")
 	@Enumerated(EnumType.STRING)
 	private Status status;
@@ -135,5 +158,5 @@ public class User implements Serializable {
 	public void setPasswordConfirmation(String passwordConfirmation) {
 		this.passwordConfirmation = passwordConfirmation;
 	}
-	
+
 }

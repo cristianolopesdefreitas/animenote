@@ -73,9 +73,9 @@ public class User implements Serializable {
 	@Column(nullable = true)
 	private String about;
 
-	@ManyToMany
-	@JoinTable(name = "tb_user_role", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
-			@JoinColumn(name = "role_id") })
+	@ManyToMany(targetEntity = Role.class)
+	@JoinTable(name = "tb_user_role", joinColumns = { @JoinColumn(name = "user_id", nullable = false) }, inverseJoinColumns = {
+			@JoinColumn(name = "role_id", nullable = false) })
 	private Set<Role> roles;
 
 	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'I'")

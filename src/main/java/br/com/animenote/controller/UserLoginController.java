@@ -1,5 +1,8 @@
 package br.com.animenote.controller;
 
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,11 +12,20 @@ public class UserLoginController {
 	
 	@GetMapping("/login")
     public String login(String error, String logout, Model model) {
-        if (error != null)
-            model.addAttribute("error", "Seu nome de usuário e/ou senha são inválidos.");
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 
-        if (logout != null)
-            model.addAttribute("message", "Logout realizado com sucesso.");
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+		    return "redirect:/";
+		}
+		
+        if (error != null) {
+            model.addAttribute("error", "Login.error");
+        }
+
+        if (logout != null) {
+            model.addAttribute("message", "Logout.success");
+        }
 
         return "login";
     }

@@ -3,6 +3,9 @@ package br.com.animenote.controller;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,14 +28,21 @@ public class UserRegistrationController {
     @Autowired
     private UserValidator userValidator;
 	
-	@GetMapping("/user-registration")
+	@GetMapping("/cadastro")
 	public String userRegistration(User user, Model model) {
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		if (!(auth instanceof AnonymousAuthenticationToken)) {
+		    return "redirect:/";
+		}
+		
 		model.addAttribute("user", user);
 		
 		return "user-registration";
 	}
 
-	@PostMapping("/user-registration")
+	@PostMapping("/cadastro")
 	public String save(@Valid User user, BindingResult result, Model model) {
 		userValidator.validate(user, result);
 		
@@ -40,7 +50,7 @@ public class UserRegistrationController {
 			return this.userRegistration(user, model);
 		}
 		
-		userService.saveAndFlush(user);
+		userService.saveUser(user);
 		
 		securityService.autologin(user.getUsername(), user.getPasswordConfirmation());
 		

@@ -1,12 +1,14 @@
 package br.com.animenote.model;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 
 @Entity(name = "tb_anime_creator")
 public class AnimeCreator implements Serializable {
@@ -18,6 +20,9 @@ public class AnimeCreator implements Serializable {
 	
 	@Column(nullable = false, length = 50)
 	private String name;
+	
+	@ManyToMany(mappedBy = "animeCreators")
+	private Set<Anime> Animes;
 
 	public Long getId() {
 		return id;
@@ -33,6 +38,14 @@ public class AnimeCreator implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public Set<Anime> getAnimes() {
+		return Animes;
+	}
+
+	public void setAnimes(Set<Anime> animes) {
+		Animes = animes;
 	}
 	
 }

@@ -21,9 +21,15 @@ public class UserService {
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 	
-	public User saveAndFlush(User user) {
+	public User saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setRoles(new HashSet<>(roleRepository.findAll()));
+		user.setRoles(new HashSet<>(roleRepository.findByName("USER")));
+		return userRepository.saveAndFlush(user);
+	}
+	
+	public User saveAdministrator(User user) {
+		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+		user.setRoles(new HashSet<>(roleRepository.findAll()));
 		return userRepository.saveAndFlush(user);
 	}
 	

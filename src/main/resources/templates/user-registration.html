@@ -7,7 +7,7 @@
 	<title>Anime Note - Cadastro de Usuário</title>
 </head>
 <body>
-	<form th:object="${user}" th:action="@{/user-registration}" method="post">
+	<form th:object="${user}" th:action="@{/cadastro}" method="post">
 		<div>
 			<label for="name">Nome:</label>
 			<input type="text" th:field="*{name}" id="name" maxlength="50" />
@@ -37,6 +37,8 @@
 			<input type="password" th:field="*{passwordConfirmation}" id="passwordConfirmation" />
 			<span th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}"></span>
 		</div>
+		
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
 		<button type="submit">Cadastrar</button>
 	</form>

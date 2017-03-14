@@ -12,31 +12,33 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
-    private UserDetailsService userDetailsService;
+	private UserDetailsService userDetailsService;
 
-    @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-	
+	@Bean
+	public BCryptPasswordEncoder bCryptPasswordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
 			.authorizeRequests()
-				.antMatchers("/user-registration")
-				.permitAll()
+				.antMatchers("/cadastro")
+					.permitAll()
 				.anyRequest().authenticated()
+				.antMatchers("/administracao/**")
+					.access("hasRole('ADMIN')")
 				.and()
-			.formLogin()
-            	.loginPage("/login")
-            	.permitAll()
-            	.and()
-            .logout()
-            	.permitAll();
+				.formLogin()
+					.loginPage("/login")
+					.permitAll()
+				.and()
+				.logout()
+					.permitAll();
 	}
-	
+
 	@Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
-    }
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
+	}
 }

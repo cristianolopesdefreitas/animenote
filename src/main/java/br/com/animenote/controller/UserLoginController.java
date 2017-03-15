@@ -20,11 +20,11 @@ public class UserLoginController {
 		}
 		
         if (error != null) {
-            model.addAttribute("error", "Login.error");
+            model.addAttribute("error", "Seu nome de usuário e/ou senha são inválidos.");
         }
 
         if (logout != null) {
-            model.addAttribute("message", "Logout.success");
+            model.addAttribute("message", "Logout realizado com sucesso.");
         }
 
         return "login";

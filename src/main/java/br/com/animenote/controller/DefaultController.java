@@ -4,10 +4,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
-public class AdministrationController {
+public class DefaultController {
 	
-	@GetMapping("/administracao")
-	public String administration() {
-		return "administrator";
+	@GetMapping("/error")
+	public String pageNotFound() {
+		return "404";
 	}
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import br.com.animenote.model.User;
@@ -21,12 +22,12 @@ import br.com.animenote.service.auth.UserValidator;
 public class UserRegistrationController {
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-    private SecurityService securityService;
 
     @Autowired
     private UserValidator userValidator;
+    
+    @Autowired
+    private SecurityService securityService;
 	
 	@GetMapping("/cadastro")
 	public String userRegistration(User user, Model model) {
@@ -55,6 +56,16 @@ public class UserRegistrationController {
 		securityService.autologin(user.getUsername(), user.getPasswordConfirmation());
 		
 		return "redirect:/";
+	}
+	
+	@GetMapping("/confirmacao-de-conta/{username}")
+	public String confirmAccount(@PathVariable("username") String username) {
+		
+		if (userService.confirmAccount(username)) {
+			return "confirm-account-success";
+		} else {
+			return "confirm-account-error";
+		}
 	}
 	
 }

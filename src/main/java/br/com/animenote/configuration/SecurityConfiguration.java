@@ -6,15 +6,14 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import br.com.animenote.service.auth.UserDetailsServiceImpl;
 
 @Configuration
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	@Autowired
-	//private UserDetailsService userDetailsService;
-	private UserDetailsServiceImpl userDetailsService;
+	private UserDetailsService userDetailsService;
+	//private UserDetailsServiceImpl userDetailsService;
 
 	@Bean
 	public BCryptPasswordEncoder bCryptPasswordEncoder() {
@@ -25,7 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		httpSecurity
 			.authorizeRequests()
-				.antMatchers("/cadastro")
+				.antMatchers("/cadastro", "/confirmacao-de-conta/**")
 					.permitAll()
 				.anyRequest().authenticated()
 				.antMatchers("/administracao/**")

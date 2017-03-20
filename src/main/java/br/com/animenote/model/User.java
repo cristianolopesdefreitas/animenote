@@ -28,7 +28,7 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	public User() {
-		this.status = Status.A;
+		this.status = Status.I;
 	}
 
 	@Id
@@ -60,7 +60,7 @@ public class User implements Serializable {
 	@Column(nullable = false, length = 60)
 	private String password;
 	
-	@NotBlank
+	//@NotBlank
 	@Transient
 	private String passwordConfirmation;
 

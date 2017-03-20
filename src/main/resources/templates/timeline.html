@@ -12,5 +12,11 @@
 		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<button type="submit">Sair</button>
 	</form>
+	
+	<form th:action="@{/avatar-upload}" method="post" enctype="multipart/form-data">
+		<input type="file" name="${avatar}" />
+		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+		<button type="submit">Enviar</button>
+	</form>
 </body>
 </html>

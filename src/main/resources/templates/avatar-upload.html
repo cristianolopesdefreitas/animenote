@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Anime Note - Atualizar avatar</title>
+</head>
+<body>
+	<form th:action="@{/atualizar-avatar}" method="post" enctype="multipart/form-data">
+		<div>
+			<label for="avatar">Avatar:</label>
+			<input type="file" name="avatar" id="avatar" />
+			<span th:text="${error}"></span>
+		</div>
+		<button type="submit">Atualizar</button>
+		<span th:text="${success}"></span>
+	</form>
+	
+	<a th:href="@{/}">Voltar</a>
+</body>
+</html>

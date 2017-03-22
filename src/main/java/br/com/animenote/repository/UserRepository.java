@@ -15,8 +15,15 @@ import br.com.animenote.model.User;
 public interface UserRepository extends JpaRepository<User, Long> {
 	User findByUsername(String username);
 	
+	User findById(Long id);
+	
 	@Modifying
 	@Transactional
 	@Query("UPDATE tb_user u SET u.status = :status WHERE u.id = :id")
-	int changeStatus(@Param("id") Long long1, @Param("status") Status status);
+	int changeStatus(@Param("id") Long id, @Param("status") Status status);
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE tb_user u SET u.avatar = :avatar WHERE u.id = :id")
+	int changeAvatar(@Param("id") Long id, @Param("avatar") String avatar);
 }

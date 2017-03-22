@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<title>Anime Note - Atualizar dados de Usuário</title>
+</head>
+<body>
+	<form th:object="${user}" th:action="@{/atualizar-dados-de-usuario}" method="post" enctype="multipart/form-data">
+		<div>
+			<label for="name">Nome:</label>
+			<input type="text" name="name" id="name" maxlength="50" th:value="${name}" />
+		</div>
+
+		<div>
+			<label for="email">E-mail:</label>
+			<input type="text" name="email" id="email" th:value="${email}" />
+		</div>
+		
+		<div>
+			<label for="username">Usuário:</label>
+			<input type="text" name="username" id="username" maxlength="50" th:value="${username}" />
+		</div>
+		
+		<div>
+			<label for="avatar">Avatar:</label>
+			<input type="file" name="avatar" id="avatar" />
+		</div>
+		
+		<div>
+			<label for="birth-date">Data de Nascimento:</label>
+			<input type="text" name="birthDate" id="birth-date" maxlength="10" th:value="${birthDate}" />
+		</div>
+		
+		<div>
+			<label for="about">Sobre você:</label>
+			<textarea name="about" id="about" maxlength="255" th:text="${about}"></textarea>
+		</div>
+
+		<button type="submit">Atualizar</button>
+	</form>
+</body>
+</html>

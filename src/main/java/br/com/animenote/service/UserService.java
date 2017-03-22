@@ -67,7 +67,6 @@ public class UserService {
 
 		if (user != null) {
 			user.setStatus(Status.A);
-			//userRepository.saveAndFlush(user);
 			userRepository.changeStatus(user.getId(), Status.A);
 			
 			return true;
@@ -76,8 +75,15 @@ public class UserService {
 		return false;
 	}
 	
-	public void changeAvatar(Long id, String fileName, File file) {
+	public void changeAvatar(Long id, String avatar, String path) {
+		User user = userRepository.findById(id);
 		
+		if (user.getAvatar() != null) {
+			File currentAvatar = new File(path + user.getAvatar());
+			currentAvatar.delete();
+		}
+		
+		userRepository.changeAvatar(id, avatar);
 	}
 
 }

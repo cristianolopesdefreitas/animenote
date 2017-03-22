@@ -21,8 +21,8 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	}
 
 	@Override
-	protected void configure(HttpSecurity httpSecurity) throws Exception {
-		httpSecurity
+	protected void configure(HttpSecurity http) throws Exception {
+		http
 			.authorizeRequests()
 				.antMatchers("/cadastro", "/confirmacao-de-conta/**")
 					.permitAll()

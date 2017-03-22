@@ -5,18 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Anime Note - Timeline</title>
+    
+    <link th:href="@{/css/test.css}" rel="stylesheet" />
 </head>
 <body>
     <h1>Timeline do usuário.</h1>
     <form th:action="@{/logout}" method="post">
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 		<button type="submit">Sair</button>
 	</form>
 	
-	<form th:action="@{/avatar-upload}" method="post" enctype="multipart/form-data">
-		<input type="file" name="${avatar}" />
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
-		<button type="submit">Enviar</button>
-	</form>
+	<span th:text="${user.name}"></span>
+	
+	<img th:if="${user?.avatar}" th:src="@{/images/uploads/} + ${user.avatar}" th:alt="${user.name}" />
+	
+	<a th:href="@{/atualizar-avatar}">Atualizar Avatar</a>
 </body>
 </html>

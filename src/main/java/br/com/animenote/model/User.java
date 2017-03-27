@@ -34,38 +34,44 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
+
 	@NotBlank
 	@Size(min = 3, max = 50)
 	@Valid
 	@Column(nullable = false, length = 50)
 	private String name;
-	
+
 	@NotBlank
 	@Email
 	@Size(max = 50)
 	@Valid
 	@Column(nullable = false, length = 50)
 	private String email;
-	
+
 	@NotBlank
 	@Size(min = 6, max = 50)
 	@Valid
 	@Column(nullable = false, length = 32)
 	private String username;
-	
+
 	@NotBlank
 	@Size(min = 8)
 	@Valid
 	@Column(nullable = false, length = 60)
 	private String password;
-	
-	//@NotBlank
+
+	// @NotBlank
 	@Transient
 	private String passwordConfirmation;
 
-	@Column(nullable = true, length = 50)
-	private String avatar;
+	// @Column(nullable = true, length = 50)
+	// private String avatar;
+
+	@Column(nullable = true, columnDefinition = "longblob")
+	private byte[] avatar;
+
+	@Column(nullable = true, length = 10)
+	private String avatarType;
 
 	@Column(nullable = true)
 	private Date birthDate;
@@ -74,8 +80,9 @@ public class User implements Serializable {
 	private String about;
 
 	@ManyToMany(targetEntity = Role.class)
-	@JoinTable(name = "tb_user_role", joinColumns = { @JoinColumn(name = "user_id", nullable = false) }, inverseJoinColumns = {
-			@JoinColumn(name = "role_id", nullable = false) })
+	@JoinTable(name = "tb_user_role", joinColumns = {
+			@JoinColumn(name = "user_id", nullable = false) }, inverseJoinColumns = {
+					@JoinColumn(name = "role_id", nullable = false) })
 	private Set<Role> roles;
 
 	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'I'")
@@ -130,12 +137,28 @@ public class User implements Serializable {
 		this.passwordConfirmation = passwordConfirmation;
 	}
 
-	public String getAvatar() {
+	// public String getAvatar() {
+	// return avatar;
+	// }
+	//
+	// public void setAvatar(String avatar) {
+	// this.avatar = avatar;
+	// }
+
+	public byte[] getAvatar() {
 		return avatar;
 	}
 
-	public void setAvatar(String avatar) {
+	public void setAvatar(byte[] avatar) {
 		this.avatar = avatar;
+	}
+
+	public String getAvatarType() {
+		return avatarType;
+	}
+
+	public void setAvatarType(String avatarType) {
+		this.avatarType = avatarType;
 	}
 
 	public Date getBirthDate() {

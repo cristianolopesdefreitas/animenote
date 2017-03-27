@@ -75,15 +75,12 @@ public class UserService {
 		return false;
 	}
 	
-	public void changeAvatar(Long id, String avatar, String path) {
-		User user = userRepository.findById(id);
-		
-		if (user.getAvatar() != null) {
-			File currentAvatar = new File(path + user.getAvatar());
-			currentAvatar.delete();
-		}
-		
-		userRepository.changeAvatar(id, avatar);
+	public void changeAvatar(Long id, byte[] avatar, String avatarType) {
+		userRepository.changeAvatar(id, avatar, avatarType);
+	}
+	
+	public void updateUser(User user) {
+		userRepository.saveAndFlush(user);
 	}
 
 }

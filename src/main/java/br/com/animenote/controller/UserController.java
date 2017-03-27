@@ -1,14 +1,9 @@
 package br.com.animenote.controller;
 
-import java.io.File;
 import java.io.IOException;
-import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.security.SecureRandom;
+import java.util.Base64;
 
-import javax.servlet.ServletContext;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -16,6 +11,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,16 +19,15 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.animenote.model.User;
 import br.com.animenote.service.UserService;
+import br.com.animenote.service.auth.UserValidator;
 
 @Controller
 public class UserController {
-	private static final String avatarPath = "src/main/resources/static/images/uploads/";
-	
 	@Autowired
 	private UserService userService;
 	
 	@Autowired
-	private ServletContext context;
+    private UserValidator userValidator;
 	
 	@GetMapping("/")
 	public String userTimeline(Model model) {
@@ -40,13 +35,22 @@ public class UserController {
 		UserDetails userDetails = (UserDetails)auth.getPrincipal();
 		
 		User user = userService.findByUsername(userDetails.getUsername());
+		
 		model.addAttribute("user", user);
+		
+		String avatar = null;
+		
+		if (user.getAvatar() != null) {
+			avatar = "data:" + user.getAvatarType() + ";base64," + new String(Base64.getEncoder().encode(user.getAvatar()));
+		}
+		
+		model.addAttribute("avatar", avatar);
 		
 		return "timeline";
 	}
 	
-	@GetMapping("/atualizar-dados-de-usuario")
-	public String updateUserData(Model model) {
+	@GetMapping("/minhas-informacoes")
+	public String userInformations(Model model) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails)auth.getPrincipal();
@@ -55,7 +59,30 @@ public class UserController {
 		
 		model.addAttribute("user", user);
 		
-		return "complete-user-registration";
+		return "my-informations";
+	}
+	
+	@PostMapping("/minhas-informacoes")
+	public String UpdateUserInformations(@Valid User user, BindingResult result, Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails)auth.getPrincipal();
+		
+		User currentUser = userService.findByUsername(userDetails.getUsername());
+		
+		currentUser.setName(user.getName());
+		currentUser.setEmail(user.getEmail());
+		currentUser.setBirthDate(user.getBirthDate());
+		currentUser.setAbout(user.getAbout());
+		
+		userValidator.validate(currentUser, result);
+		
+		if (result.hasErrors()) {
+			return this.userInformations(model);
+		}
+		
+		userService.updateUser(currentUser);
+		
+		return "redirect:/minhas-informacoes";
 	}
 	
 	@GetMapping("/atualizar-avatar")
@@ -78,38 +105,25 @@ public class UserController {
 			return this.updateUserAvatar(model);
 		}
 		
-		if (avatar.getSize() > 512000) {
-			model.addAttribute("error", "O tamanho da imagem não pode passar de 500KB.");
+		if (avatar.getSize() > 1024000) {
+			model.addAttribute("error", "O tamanho da imagem não pode passar de 1MB.");
 			return this.updateUserAvatar(model);
 		}
 		
-		String imageName = new BigInteger(130, new SecureRandom()).toString(32);
-		String imageType = avatar.getContentType().toLowerCase().equals("image/png") ? ".png" : ".jpg";
-		String completePath = context.getContextPath() + avatarPath;
-		
-		while (new File(completePath + imageName + imageType).exists()) {
-			imageName = new BigInteger(130, new SecureRandom()).toString(32);
-		}
-		
-		try {
-            byte[] bytes = avatar.getBytes();
-            Path path = Paths.get(completePath + imageName + imageType);
-            Files.write(path, bytes);
-            
-            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-    		UserDetails userDetails = (UserDetails)auth.getPrincipal();
-    		
-    		User user = userService.findByUsername(userDetails.getUsername());
-    		
-    		userService.changeAvatar(user.getId(), imageName + imageType, completePath);
-    		
-    		model.addAttribute("success", "Sua foto foi alterada com sucesso!");
-
-        } catch (IOException e) {
-            e.printStackTrace();
+        try {
+	        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			UserDetails userDetails = (UserDetails)auth.getPrincipal();
+			
+			User user = userService.findByUsername(userDetails.getUsername());
+			
+			userService.changeAvatar(user.getId(), avatar.getBytes(), avatar.getContentType());
+			
+			model.addAttribute("success", "Sua foto foi alterada com sucesso!");
+        } catch(IOException e) {
+        	model.addAttribute("error", "Ocorreu um erro, não foi possível fazer o upload.");
         }
 		
-		return "avatar-upload";
+        return this.updateUserAvatar(model);
 	}
 	
 }

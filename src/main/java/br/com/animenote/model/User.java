@@ -1,7 +1,7 @@
 package br.com.animenote.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Calendar;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -20,6 +20,7 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.animenote.constants.Status;
 
@@ -51,16 +52,15 @@ public class User implements Serializable {
 	@NotBlank
 	@Size(min = 6, max = 50)
 	@Valid
-	@Column(nullable = false, length = 32)
+	@Column(nullable = false, length = 50)
 	private String username;
 
-	@NotBlank
-	@Size(min = 8)
-	@Valid
+//	@NotBlank
+//	@Size(min = 8)
+//	@Valid
 	@Column(nullable = false, length = 60)
 	private String password;
-
-	// @NotBlank
+	
 	@Transient
 	private String passwordConfirmation;
 
@@ -72,9 +72,10 @@ public class User implements Serializable {
 
 	@Column(nullable = true, length = 10)
 	private String avatarType;
-
+	
+	@DateTimeFormat(pattern="dd/MM/yyyy")
 	@Column(nullable = true)
-	private Date birthDate;
+	private Calendar birthDate;
 
 	@Column(nullable = true)
 	private String about;
@@ -161,11 +162,11 @@ public class User implements Serializable {
 		this.avatarType = avatarType;
 	}
 
-	public Date getBirthDate() {
+	public Calendar getBirthDate() {
 		return birthDate;
 	}
 
-	public void setBirthDate(Date birthDate) {
+	public void setBirthDate(Calendar birthDate) {
 		this.birthDate = birthDate;
 	}
 

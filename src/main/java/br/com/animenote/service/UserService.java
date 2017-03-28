@@ -1,6 +1,7 @@
 package br.com.animenote.service;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.HashSet;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,8 +80,8 @@ public class UserService {
 		userRepository.changeAvatar(id, avatar, avatarType);
 	}
 	
-	public void updateUser(User user) {
-		userRepository.saveAndFlush(user);
+	public void updateUser(Long id, String name, String username, String email, Calendar birthDate, String about) {
+		userRepository.updateUser(id, name, username, email, birthDate, about);
 	}
 
 }

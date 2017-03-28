@@ -11,18 +11,26 @@
 		<input type="hidden" id="id" maxlength="50" th:field="*{id}" />
 		<div>
 			<label for="name">Nome:</label>
-			<input type="text" id="name" maxlength="50" th:field="*{name}" />
+			<input type="text" th:field="*{name}" id="name" maxlength="50" />
 			<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+		</div>
+		
+		<div>
+			<label for="username">Usuário:</label>
+			<input type="text" th:field="*{username}" id="username" maxlength="50" />
+			<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
 		</div>
 
 		<div>
 			<label for="email">E-mail:</label>
-			<input type="text" id="email" th:field="*{email}" />
+			<input type="text" th:field="*{email}" id="email" />
+			<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
 		</div>
 		
 		<div>
 			<label for="birth-date">Data de Nascimento:</label>
-			<input type="text" id="birth-date" maxlength="10" th:field="*{birthDate}" />
+			<input type="text" th:field="*{birthDate}" id="birth-date" maxlength="10" />
+			<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
 		</div>
 		
 		<div>

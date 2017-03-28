@@ -19,15 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.animenote.model.User;
 import br.com.animenote.service.UserService;
-import br.com.animenote.service.auth.UserValidator;
 
 @Controller
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
-	@Autowired
-    private UserValidator userValidator;
 	
 	@GetMapping("/")
 	public String userTimeline(Model model) {
@@ -50,12 +46,12 @@ public class UserController {
 	}
 	
 	@GetMapping("/minhas-informacoes")
-	public String userInformations(Model model) {
+	public String userInformations(User user, Model model) {
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails)auth.getPrincipal();
 		
-		User user = userService.findByUsername(userDetails.getUsername());
+		user = userService.findByUsername(userDetails.getUsername());
 		
 		model.addAttribute("user", user);
 		
@@ -64,23 +60,11 @@ public class UserController {
 	
 	@PostMapping("/minhas-informacoes")
 	public String UpdateUserInformations(@Valid User user, BindingResult result, Model model) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetails = (UserDetails)auth.getPrincipal();
-		
-		User currentUser = userService.findByUsername(userDetails.getUsername());
-		
-		currentUser.setName(user.getName());
-		currentUser.setEmail(user.getEmail());
-		currentUser.setBirthDate(user.getBirthDate());
-		currentUser.setAbout(user.getAbout());
-		
-		userValidator.validate(currentUser, result);
-		
 		if (result.hasErrors()) {
-			return this.userInformations(model);
+			return this.userInformations(user, model);
 		}
 		
-		userService.updateUser(currentUser);
+		userService.updateUser(user.getId(), user.getName(), user.getUsername(), user.getEmail(), user.getBirthDate(), user.getAbout());
 		
 		return "redirect:/minhas-informacoes";
 	}

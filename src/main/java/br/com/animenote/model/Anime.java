@@ -16,31 +16,42 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import br.com.animenote.constants.Status;
 
 @Entity(name = "tb_anime")
 public class Anime implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public Anime() {
+		this.status = Status.I;
+	}
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
+	
+	@NotBlank
 	@Column(nullable = false, length = 50)
 	private String name;
 
-	@Column(nullable = false)
+	@Column(nullable = false, length = 4)
+	@Size(min = 4, max = 4)
 	@Valid
-	private Short startYear;
+	@NotBlank
+	private Short releaseYear;
 
-	@Column(nullable = false)
-	@Valid
-	private Short endYear;
-
-	@Column(nullable = false)
+	@Column(nullable = true)
 	@Valid
 	private Integer episodeNumbers;
+	
+	@Valid
+	@NotBlank
+	@Column(nullable = true, columnDefinition = "text")
+	private String resume;
 
 	@ManyToMany(targetEntity = AnimeCategory.class)
 	@JoinTable(name = "tb_anime_and_anime_category", joinColumns = {
@@ -76,22 +87,6 @@ public class Anime implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public Short getStartYear() {
-		return startYear;
-	}
-
-	public void setStartYear(Short startYear) {
-		this.startYear = startYear;
-	}
-
-	public Short getEndYear() {
-		return endYear;
-	}
-
-	public void setEndYear(Short endYear) {
-		this.endYear = endYear;
 	}
 
 	public Integer getEpisodeNumbers() {
@@ -132,6 +127,22 @@ public class Anime implements Serializable {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public Short getReleaseYear() {
+		return releaseYear;
+	}
+
+	public void setReleaseYear(Short releaseYear) {
+		this.releaseYear = releaseYear;
+	}
+
+	public String getResume() {
+		return resume;
+	}
+
+	public void setResume(String resume) {
+		this.resume = resume;
 	}
 
 }

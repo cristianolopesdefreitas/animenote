@@ -8,13 +8,13 @@
 </head>
 <body>
 	<form th:action="@{/atualizar-avatar}" method="post" enctype="multipart/form-data">
+		<span th:text="${error}"></span>
+		<span th:text="${success}"></span>
 		<div>
 			<label for="avatar">Avatar:</label>
 			<input type="file" name="avatar" id="avatar" />
-			<span th:text="${error}"></span>
 		</div>
 		<button type="submit">Atualizar</button>
-		<span th:text="${success}"></span>
 	</form>
 	
 	<a th:href="@{/}">Voltar</a>

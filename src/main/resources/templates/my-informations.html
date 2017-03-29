@@ -8,7 +8,6 @@
 </head>
 <body>
 	<form th:object="${user}" th:action="@{/minhas-informacoes}" method="post">
-		<input type="hidden" id="id" maxlength="50" th:field="*{id}" />
 		<div>
 			<label for="name">Nome:</label>
 			<input type="text" th:field="*{name}" id="name" maxlength="50" />

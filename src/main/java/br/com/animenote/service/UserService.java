@@ -83,5 +83,9 @@ public class UserService {
 	public void updateUser(Long id, String name, String username, String email, Calendar birthDate, String about) {
 		userRepository.updateUser(id, name, username, email, birthDate, about);
 	}
+	
+	public void changePassword(Long id, String password) {
+		userRepository.changePassword(id, bCryptPasswordEncoder.encode(password));
+	}
 
 }

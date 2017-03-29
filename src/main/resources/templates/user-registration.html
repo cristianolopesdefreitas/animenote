@@ -33,12 +33,10 @@
 		</div>
 
 		<div>
-			<label for="passwordConfirmation">Confirmação de senha:</label>
-			<input type="password" th:field="*{passwordConfirmation}" id="passwordConfirmation" />
+			<label for="password-confirmation">Confirmação de senha:</label>
+			<input type="password" th:field="*{passwordConfirmation}" id="password-confirmation" />
 			<span th:if="${#fields.hasErrors('passwordConfirmation')}" th:errors="*{passwordConfirmation}"></span>
 		</div>
-		
-		<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
 
 		<button type="submit">Cadastrar</button>
 	</form>

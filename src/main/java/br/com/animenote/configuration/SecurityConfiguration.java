@@ -24,7 +24,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 			.authorizeRequests()
-				.antMatchers("/cadastro", "/confirmacao-de-conta/**")
+				.antMatchers("/cadastro", "/confirmacao-de-conta/**", "/esqueci-minha-senha")
 					.permitAll()
 				.anyRequest().authenticated()
 				.antMatchers("/administracao/**")

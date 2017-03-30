@@ -1,14 +1,21 @@
 package br.com.animenote.service;
 
-import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashSet;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring4.SpringTemplateEngine;
 
 import br.com.animenote.constants.Status;
 import br.com.animenote.model.User;
@@ -25,15 +32,28 @@ public class UserService {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
+	
 	@Autowired
-	private JavaMailSender javaMailService;
+    private JavaMailSender javaMailSender;
+	
+	@Autowired
+    private SpringTemplateEngine templateEngine;
+	
+	@Value("${spring.mail.username}")
+    private String appEmail;
+	
+	@Value("${host}")
+    private String host;
 
 	public User saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setRoles(new HashSet<>(roleRepository.findByName("USER")));
 		
-		sendMail(user);
+		try {
+			sendAccountConfirmationEmail(user);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 
 		return userRepository.saveAndFlush(user);
 	}
@@ -42,7 +62,11 @@ public class UserService {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
 		user.setRoles(new HashSet<>(roleRepository.findAll()));
 
-		sendMail(user);
+		try {
+			sendAccountConfirmationEmail(user);
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		}
 
 		return userRepository.saveAndFlush(user);
 	}
@@ -51,16 +75,70 @@ public class UserService {
 		return userRepository.findByUsername(username);
 	}
 
-	private void sendMail(User user) {
-		String confirmationMessage = "Olá, "+ user.getName() +"!<br />Agora basta confirmar seu cadastro!<br /><a href='http://animenote.com.br/"
-				+ user.getUsername() + "/'>Confirme seu cadastro.</a>";
+	private void sendAccountConfirmationEmail(User user) throws MessagingException {
+//		String confirmationMessage = "Olá, "+ user.getName() +"!<br />Agora basta confirmar seu cadastro!<br /><a href='http://animenote.com.br/"
+//				+ user.getUsername() + "/'>Confirme seu cadastro.</a>";
+//		
+//		SimpleMailMessage mailMessage = new SimpleMailMessage();
+//		mailMessage.setTo(user.getEmail());
+//		mailMessage.setSubject("Confirmação de Conta");
+//		mailMessage.setText(confirmationMessage);
+//
+//		javaMailSender.send(mailMessage);
 		
-		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setTo(user.getEmail());
-		mailMessage.setSubject("Confirmação de Conta");
-		mailMessage.setText(confirmationMessage);
-
-		//javaMailService.send(mailMessage);
+		final Context context = new Context();
+		context.setVariable("name", user.getName());
+		context.setVariable("username", user.getUsername());
+		context.setVariable("host", this.host);
+		
+		final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+		
+		mimeMessageHelper.setSubject("Confirmação de Conta");
+		mimeMessageHelper.setTo(user.getEmail());
+		
+		try {
+			mimeMessageHelper.setFrom(new InternetAddress(appEmail, "Anime Note"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		final String htmlContent = this.templateEngine.process("account-confirmation-email", context);
+		mimeMessageHelper.setText(htmlContent, true);
+		
+//		Inserir imagem
+//		try {
+//			mimeMessageHelper.addInline("logo.jpg", new FileSystemResource("imgs/logo-pro.jpg"), "image/jpg");
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
+		
+		javaMailSender.send(mimeMessage);
+	}
+	
+	public void sendForgotPasswordEmail(User user, String password) throws MessagingException {
+		final Context context = new Context();
+		context.setVariable("name", user.getName());
+		context.setVariable("username", user.getUsername());
+		context.setVariable("password", password);
+		context.setVariable("host", this.host);
+		
+		final MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+		final MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+		
+		mimeMessageHelper.setSubject("Recuperação de senha");
+		mimeMessageHelper.setTo(user.getEmail());
+		
+		try {
+			mimeMessageHelper.setFrom(new InternetAddress(appEmail, "Anime Note"));
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		
+		final String htmlContent = this.templateEngine.process("forgot-password-email", context);
+		mimeMessageHelper.setText(htmlContent, true);
+		
+		javaMailSender.send(mimeMessage);
 	}
 	
 	public boolean confirmAccount(String username) {
@@ -86,6 +164,10 @@ public class UserService {
 	
 	public void changePassword(Long id, String password) {
 		userRepository.changePassword(id, bCryptPasswordEncoder.encode(password));
+	}
+	
+	public User findByEmail(String email) {
+		return userRepository.findByEmail(email);
 	}
 
 }

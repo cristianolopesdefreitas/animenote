@@ -10,7 +10,7 @@
 	<h1>Seja bem vindo, <span th:text="${name}"></span>!</h1>
 	<p>Agora você só precisa confirmar seu e-mail clicando no link abaixo:</p>
 	<p>
-		<a th:href="http://www.animenote.com.br/${id}/${email}">Confirme seu e-mail!</a>
+		<a th:href="${'http://' + host + '/confirmacao-de-conta/' + username}">Confirme seu e-mail!</a>
 	</p>
 </body>
 </html>

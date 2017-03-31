@@ -12,27 +12,36 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.validation.Valid;
+
+import org.hibernate.validator.constraints.NotBlank;
 
 import br.com.animenote.constants.Status;
 
-@Entity
-public class UserMessage implements Serializable {
+@Entity(name = "tb_user_private_message")
+public class UserPrivateMessage implements Serializable {
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-
-	@Column(nullable = false, length = 255)
+	
+	@Valid
+	@NotBlank
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_sender_id", nullable = false)
+    private User userSender;
+	
+	@Valid
+	@NotBlank
+	@ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_receiver_id", nullable = false)
+    private User userReceiver;
+	
+	@Valid
+	@NotBlank
+	@Column(nullable = true, length = 255)
 	private String message;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_from_id", nullable = false)
-	private User userFrom;
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_to_id", nullable = false)
-	private User userTo;
 	
 	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'A'")
 	@Enumerated(EnumType.STRING)
@@ -46,28 +55,28 @@ public class UserMessage implements Serializable {
 		this.id = id;
 	}
 
+	public User getUserSender() {
+		return userSender;
+	}
+
+	public void setUserSender(User userSender) {
+		this.userSender = userSender;
+	}
+
+	public User getUserReceiver() {
+		return userReceiver;
+	}
+
+	public void setUserReceiver(User userReceiver) {
+		this.userReceiver = userReceiver;
+	}
+
 	public String getMessage() {
 		return message;
 	}
 
 	public void setMessage(String message) {
 		this.message = message;
-	}
-
-	public User getUserFrom() {
-		return userFrom;
-	}
-
-	public void setUserFrom(User userFrom) {
-		this.userFrom = userFrom;
-	}
-
-	public User getUserTo() {
-		return userTo;
-	}
-
-	public void setUserTo(User userTo) {
-		this.userTo = userTo;
 	}
 
 	public Status getStatus() {
@@ -77,5 +86,5 @@ public class UserMessage implements Serializable {
 	public void setStatus(Status status) {
 		this.status = status;
 	}
-
+	
 }

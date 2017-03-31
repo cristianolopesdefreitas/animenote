@@ -21,8 +21,8 @@ public class AnimeCreator implements Serializable {
 	@Column(nullable = false, length = 50)
 	private String name;
 	
-	@ManyToMany(mappedBy = "animeCreators")
-	private Set<Anime> Animes;
+//	@ManyToMany(mappedBy = "animeCreators")
+//	private Set<Anime> Animes;
 
 	public Long getId() {
 		return id;
@@ -40,12 +40,12 @@ public class AnimeCreator implements Serializable {
 		this.name = name;
 	}
 
-	public Set<Anime> getAnimes() {
-		return Animes;
-	}
-
-	public void setAnimes(Set<Anime> animes) {
-		Animes = animes;
-	}
+//	public Set<Anime> getAnimes() {
+//		return Animes;
+//	}
+//
+//	public void setAnimes(Set<Anime> animes) {
+//		Animes = animes;
+//	}
 	
 }

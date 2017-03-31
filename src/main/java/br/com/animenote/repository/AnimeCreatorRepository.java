@@ -7,5 +7,5 @@ import br.com.animenote.model.AnimeCreator;
 
 @Repository
 public interface AnimeCreatorRepository extends JpaRepository<AnimeCreator, Long> {
-
+	AnimeCreator findById(Long id);
 }

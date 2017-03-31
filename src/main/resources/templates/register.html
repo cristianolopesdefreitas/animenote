@@ -5,7 +5,7 @@
 <title>Anime Note</title>
 </head>
 <body>
-	<form th:object="${anime}" th:action="@{/save/anime}" method="post">
+	<form th:object="${anime}" th:action="@{/cadastrar-anime}" method="post">
 		<div th:if="${#fields.hasAnyErrors()}">
 	        <div th:each="detailedError : ${#fields.detailedErrors()}">
 	            <span th:text="${detailedError.message}"></span>

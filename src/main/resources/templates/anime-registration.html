@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head th:replace="fragments/fragments :: head (title = 'Cadastro de anime')"></head>
+<body>
+	<form th:object="${anime}" th:action="@{/cadastrar-anime}" method="post" enctype="multipart/form-data">
+		<div>
+			<label for="name">Nome:</label>
+			<input type="text" th:field="*{name}" id="name" />
+			<span th:text="${#fields.hasErrors('name')}"></span>
+			
+			<span th:errors="*{name}"></span>
+		</div>
+		
+		<div>
+			<label for="anime-image">Imagem:</label>
+			<input type="file" name="animeImage" id="anime-image" />
+			<span th:text="${error}"></span>
+		</div>
+		
+		<!-- <div>
+			<label for="anime-creator">Criador:</label>
+			<input type="text" th:field="*{animeCreator}" id="anime-creator" />
+			<span th:text="${#fields.hasErrors('animeCreator')}"></span>
+			<span th:errors="*{animeCreator}"></span>
+		</div> -->
+		
+		<ul>
+			<li th:each="animeCreator : ${animeCreators}">
+				<input type="radio"  th:id="${animeCreator.id}" th:field="*{animeCreator}" th:value="${animeCreator.id}"/>
+				<label th:for="${animeCreator.id}" th:text="${animeCreator.name}"></label>
+			</li>
+			<li>
+				<span th:text="${#fields.hasErrors('animeCategories')}"></span>
+				<span th:errors="*{animeCategories}"></span>
+			</li>
+		</ul>
+		
+		<div>
+			<label for="release-year">Ano de Lançamento:</label>
+			<input type="text" th:field="*{releaseYear}" id="release-year" />
+			<span th:text="${#fields.hasErrors('releaseYear')}"></span>
+			<span th:errors="*{releaseYear}"></span>
+		</div>
+		
+		<div>
+			<label for="episode-numbers">Número de Episódios:</label>
+			<input type="text" th:field="*{episodeNumbers}" id="episode-numbers" />
+			<span th:text="${#fields.hasErrors('episodeNumbers')}"></span>
+			<span th:errors="*{episodeNumbers}"></span>
+		</div>
+		
+		<div>
+			<label for="resume">Sinopse:</label>
+			<textarea th:field="*{resume}" id="resume"></textarea>
+			<span th:text="${#fields.hasErrors('resume')}"></span>
+			<span th:errors="*{resume}"></span>
+		</div>
+
+		<ul>
+			<li th:each="animeCategory : ${animeCategories}">
+				<input type="checkbox"  th:id="${animeCategory.id}" th:field="*{animeCategories}" th:value="${animeCategory.id}"/>
+				<label th:for="${animeCategory.id}" th:text="${animeCategory.category}"></label>
+			</li>
+			<li>
+				<span th:text="${#fields.hasErrors('animeCategories')}"></span>
+				<span th:errors="*{animeCategories}"></span>
+			</li>
+		</ul>
+		
+		<button type="submit">Cadastrar</button>
+	</form>
+</body>
+</html>

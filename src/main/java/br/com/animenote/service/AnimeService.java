@@ -12,21 +12,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 @Service
 public class AnimeService {
 	@Autowired
-	private AnimeRepository repository;
+	private AnimeRepository animeRepository;
 
 	public List<Anime> findAll() {
-		return repository.findAll();
+		return animeRepository.findAll();
 	}
 
 	public Anime findOne(Long id) {
-		return repository.findOne(id);
+		return animeRepository.findOne(id);
 	}
 
 	public Anime save(Anime anime) {
-		return repository.saveAndFlush(anime);
+		return animeRepository.saveAndFlush(anime);
 	}
 
 	public void delete(Long id) {
-		repository.delete(id);
+		animeRepository.delete(id);
+	}
+	
+	public List<Anime> findByUserId(Long id) {
+		return animeRepository.findByUserId(id);
 	}
 }

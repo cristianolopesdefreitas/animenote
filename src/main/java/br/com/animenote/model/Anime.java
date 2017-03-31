@@ -1,6 +1,7 @@
 package br.com.animenote.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -16,9 +17,9 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
-import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.animenote.constants.Status;
 
@@ -37,12 +38,23 @@ public class Anime implements Serializable {
 	@NotBlank
 	@Column(nullable = false, length = 50)
 	private String name;
+	
+	@Column(nullable = true, columnDefinition = "longblob")
+	private byte[] image;
+	
+	@Column(nullable = true, length = 10)
+	private String imageType;
 
-	@Column(nullable = false, length = 4)
-	@Size(min = 4, max = 4)
+//	@Column(nullable = false, length = 4)
+//	@Size(min = 4, max = 4)
+//	@Valid
+//	@NotBlank
+//	private Short releaseYear;
+	
 	@Valid
-	@NotBlank
-	private Short releaseYear;
+	@DateTimeFormat(pattern="yyyy")
+	@Column(nullable = false)
+	private Calendar releaseYear;
 
 	@Column(nullable = true)
 	@Valid
@@ -52,21 +64,27 @@ public class Anime implements Serializable {
 	@NotBlank
 	@Column(nullable = true, columnDefinition = "text")
 	private String resume;
-
+	
+	@Valid
 	@ManyToMany(targetEntity = AnimeCategory.class)
 	@JoinTable(name = "tb_anime_and_anime_category", joinColumns = {
 			@JoinColumn(name = "anime_id", nullable = false) }, inverseJoinColumns = {
 					@JoinColumn(name = "anime_category_id", nullable = false) })
 	private Set<AnimeCategory> animeCategories;
 
-	@ManyToMany(targetEntity = AnimeCreator.class)
-	@JoinTable(name = "tb_anime_and_anime_creator", joinColumns = {
-			@JoinColumn(name = "anime_id", nullable = false) }, inverseJoinColumns = {
-					@JoinColumn(name = "anime_creator_id", nullable = false) })
-	private Set<AnimeCreator> animeCreators;
+//	@ManyToMany(targetEntity = AnimeCreator.class)
+//	@JoinTable(name = "tb_anime_and_anime_creator", joinColumns = {
+//			@JoinColumn(name = "anime_id", nullable = false) }, inverseJoinColumns = {
+//					@JoinColumn(name = "anime_creator_id", nullable = false) })
+//	private Set<AnimeCreator> animeCreator;
+	
+	@Valid
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "anime_creator_id", nullable = false, referencedColumnName = "id")
+	private AnimeCreator animeCreator;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id", nullable = false)
+	@JoinColumn(name = "user_id", nullable = false, referencedColumnName = "id")
 	private User user;
 
 	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'I'")
@@ -105,12 +123,20 @@ public class Anime implements Serializable {
 		this.animeCategories = animeCategories;
 	}
 
-	public Set<AnimeCreator> getAnimeCreators() {
-		return animeCreators;
+//	public Set<AnimeCreator> getAnimeCreator() {
+//		return animeCreator;
+//	}
+//
+//	public void setAnimeCreators(Set<AnimeCreator> animeCreator) {
+//		this.animeCreator = animeCreator;
+//	}
+	
+	public AnimeCreator getAnimeCreator() {
+		return animeCreator;
 	}
 
-	public void setAnimeCreators(Set<AnimeCreator> animeCreators) {
-		this.animeCreators = animeCreators;
+	public void setAnimeCreator(AnimeCreator animeCreator) {
+		this.animeCreator = animeCreator;
 	}
 
 	public User getUser() {
@@ -129,11 +155,19 @@ public class Anime implements Serializable {
 		this.status = status;
 	}
 
-	public Short getReleaseYear() {
+//	public Short getReleaseYear() {
+//		return releaseYear;
+//	}
+//
+//	public void setReleaseYear(Short releaseYear) {
+//		this.releaseYear = releaseYear;
+//	}
+	
+	public Calendar getReleaseYear() {
 		return releaseYear;
 	}
 
-	public void setReleaseYear(Short releaseYear) {
+	public void setReleaseYear(Calendar releaseYear) {
 		this.releaseYear = releaseYear;
 	}
 
@@ -143,6 +177,22 @@ public class Anime implements Serializable {
 
 	public void setResume(String resume) {
 		this.resume = resume;
+	}
+
+	public byte[] getImage() {
+		return image;
+	}
+
+	public void setImage(byte[] image) {
+		this.image = image;
+	}
+
+	public String getImageType() {
+		return imageType;
+	}
+
+	public void setImageType(String imageType) {
+		this.imageType = imageType;
 	}
 
 }

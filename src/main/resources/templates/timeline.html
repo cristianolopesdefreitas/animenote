@@ -12,5 +12,7 @@
 	<img th:if="${user?.avatar}" th:src="${avatar}" th:alt="${user.name}" />
 	
 	<a th:href="@{/atualizar-avatar}">Atualizar Avatar</a>
+	
+	<footer th:replace="fragments/fragments :: footer"></footer>
 </body>
 </html>

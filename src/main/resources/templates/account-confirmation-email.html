@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head>
-	<meta charset="UTF-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-	<title>Anime Note - E-mail de confirmação de conta</title>
-</head>
+<head th:replace="fragments/fragments :: head (title = 'E-mail de confirmação de conta')"></head>
 <body>
 	<h1>Seja bem vindo, <span th:text="${name}"></span>!</h1>
 	<p>Agora você só precisa confirmar seu e-mail clicando no link abaixo:</p>

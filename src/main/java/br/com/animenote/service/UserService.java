@@ -8,6 +8,7 @@ import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -44,6 +45,8 @@ public class UserService {
 	
 	@Value("${host}")
     private String host;
+	
+	private static final Logger LOGGER = Logger.getLogger(UserService.class);
 
 	public User saveUser(User user) {
 		user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
@@ -52,7 +55,7 @@ public class UserService {
 		try {
 			sendAccountConfirmationEmail(user);
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			LOGGER.error("Não foi possível enviar o e-mail.");
 		}
 
 		return userRepository.saveAndFlush(user);
@@ -65,7 +68,7 @@ public class UserService {
 		try {
 			sendAccountConfirmationEmail(user);
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			LOGGER.error("Não foi possível enviar o e-mail.");
 		}
 
 		return userRepository.saveAndFlush(user);
@@ -100,7 +103,7 @@ public class UserService {
 		try {
 			mimeMessageHelper.setFrom(new InternetAddress(appEmail, "Anime Note"));
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			LOGGER.error("Encode não suportado.");
 		}
 		
 		final String htmlContent = this.templateEngine.process("account-confirmation-email", context);
@@ -113,7 +116,11 @@ public class UserService {
 //            e.printStackTrace();
 //        }
 		
-		javaMailSender.send(mimeMessage);
+		try {
+			javaMailSender.send(mimeMessage);
+		} catch (Exception e) {
+			LOGGER.error("Não foi possível enviar o e-mail.");
+		}
 	}
 	
 	public void sendForgotPasswordEmail(User user, String password) throws MessagingException {
@@ -132,13 +139,17 @@ public class UserService {
 		try {
 			mimeMessageHelper.setFrom(new InternetAddress(appEmail, "Anime Note"));
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			LOGGER.error("Encode não suportado.");
 		}
 		
 		final String htmlContent = this.templateEngine.process("forgot-password-email", context);
 		mimeMessageHelper.setText(htmlContent, true);
 		
-		javaMailSender.send(mimeMessage);
+		try {
+			javaMailSender.send(mimeMessage);
+		} catch (Exception e) {
+			LOGGER.error("Não foi possível enviar o e-mail.");
+		}
 	}
 	
 	public boolean confirmAccount(String username) {

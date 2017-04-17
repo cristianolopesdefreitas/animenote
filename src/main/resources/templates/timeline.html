@@ -2,17 +2,19 @@
 <html lang="pt-BR">
 <head th:replace="fragments/fragments :: head (title = 'Timeline')"></head>
 <body>
+    <header th:replace="fragments/fragments :: internalHeader"></header>
+    
     <h1>Timeline do usuário.</h1>
     <form th:action="@{/logout}" method="post">
 		<button type="submit">Sair</button>
 	</form>
-	
+
 	<span th:text="${user.name}"></span>
-	
+
 	<img th:if="${user?.avatar}" th:src="${avatar}" th:alt="${user.name}" />
-	
+
 	<a th:href="@{/atualizar-avatar}">Atualizar Avatar</a>
-	
+
 	<footer th:replace="fragments/fragments :: footer"></footer>
 </body>
 </html>

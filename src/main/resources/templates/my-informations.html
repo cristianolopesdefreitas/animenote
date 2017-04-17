@@ -2,39 +2,49 @@
 <html lang="pt-BR">
 <head th:replace="fragments/fragments :: head (title = 'Atualizar dados de usuário')"></head>
 <body>
-	<form th:object="${user}" th:action="@{/minhas-informacoes}" method="post">
-		<div>
-			<label for="name">Nome:</label>
-			<input type="text" th:field="*{name}" id="name" maxlength="50" />
-			<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
-		</div>
-		
-		<div>
-			<label for="username">Usuário:</label>
-			<input type="text" th:field="*{username}" id="username" maxlength="50" />
-			<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
-		</div>
-
-		<div>
-			<label for="email">E-mail:</label>
-			<input type="text" th:field="*{email}" id="email" />
-			<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-		</div>
-		
-		<div>
-			<label for="birth-date">Data de Nascimento:</label>
-			<input type="text" th:field="*{birthDate}" id="birth-date" maxlength="10" />
-			<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
-		</div>
-		
-		<div>
-			<label for="about">Sobre você:</label>
-			<textarea name="about" id="about" maxlength="255" th:field="*{about}"></textarea>
-		</div>
-
-		<button type="submit">Atualizar</button>
-	</form>
+	<header th:replace="fragments/fragments :: internalHeader"></header>
 	
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+					<form th:object="${user}" th:action="@{/minhas-informacoes}" method="post">
+						<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? has-error : ''">
+							<label for="name">Nome:</label>
+							<input type="text" th:field="*{name}" id="name" class="form-control" placeholder="nome" maxlength="50" />
+							<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+						</div>
+
+						<div class="form-group" th:classappend="${#fields.hasErrors('username')} ? has-error : ''">
+							<label for="username">Usuário:</label>
+							<input type="text" th:field="*{username}" id="username" class="form-control" placeholder="usuário" maxlength="50" />
+							<span th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></span>
+						</div>
+
+						<div class="form-group" th:classappend="${#fields.hasErrors('email')} ? has-error : ''">
+							<label for="email">E-mail:</label>
+							<input type="text" th:field="*{email}" id="email" class="form-control" placeholder="e-mail" />
+							<span th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
+						</div>
+
+						<div class="form-group" th:classappend="${#fields.hasErrors('birthDate')} ? has-error : ''">
+							<label for="birth-date">Data de Nascimento:</label>
+							<input type="text" th:field="*{birthDate}" id="birth-date" class="form-control" placeholder="data de nascimento" maxlength="10" />
+							<span th:if="${#fields.hasErrors('birthDate')}" th:errors="*{birthDate}"></span>
+						</div>
+
+						<div class="form-group" th:classappend="${#fields.hasErrors('about')} ? has-error : ''">
+							<label for="about">Sobre você:</label>
+							<textarea th:field="*{about}" id="about" class="form-control" placeholder="sobre você" maxlength="255"></textarea>
+						</div>
+
+						<button type="submit" class="btn btn-block btn-primary">Atualizar</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</main>
+
 	<footer th:replace="fragments/fragments :: footer"></footer>
 </body>
 </html>

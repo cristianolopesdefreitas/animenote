@@ -54,7 +54,7 @@ public class AnimeController {
 	}
 
 	@PostMapping("/cadastrar-anime")
-	public String animeRegistration(@Valid Anime anime, @RequestParam("animeImage") MultipartFile animeImage, BindingResult result, Model model) {
+	public String animeRegistration(@Valid Anime anime, BindingResult result, @RequestParam("animeImage") MultipartFile animeImage, Model model) {
 		if (result.hasErrors()) {
 			return this.animeRegistrationScreen(anime, model);
 		}

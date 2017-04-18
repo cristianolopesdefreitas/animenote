@@ -3,17 +3,34 @@
 <head th:replace="fragments/fragments :: head (title = 'Timeline')"></head>
 <body>
     <header th:replace="fragments/fragments :: internalHeader"></header>
-    
-    <h1>Timeline do usuário.</h1>
-    <form th:action="@{/logout}" method="post">
-		<button type="submit">Sair</button>
-	</form>
 
-	<span th:text="${user.name}"></span>
-
-	<img th:if="${user?.avatar}" th:src="${avatar}" th:alt="${user.name}" />
-
-	<a th:href="@{/atualizar-avatar}">Atualizar Avatar</a>
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-3">
+                    <div class="text-center">
+                        <a th:href="@{/atualizar-avatar}">
+                            <!-- <img th:if="${user?.avatar}" th:src="${avatar}" th:alt="${user.name}" class="img-circle timeline-avatar" /> -->
+                            <img th:src="${avatar}" th:alt="${user.name}" class="img-circle timeline-avatar" />
+                        </a>
+                        <h2 th:text="${user.name}"></h2>
+                    </div>
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">
+                            <span class="badge">200</span>Seguindo
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <span class="badge">180</span>Seguidores
+                        </a>
+                        <a href="#" class="list-group-item">
+                            <span class="badge">500</span>Animes
+                        </a>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-9"></div>
+            </div>
+        </div>
+    </main>
 
 	<footer th:replace="fragments/fragments :: footer"></footer>
 </body>

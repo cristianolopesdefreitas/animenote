@@ -43,6 +43,8 @@ public class UserController {
 		if (user.getAvatar() != null) {
 			avatar = "data:" + user.getAvatarType() + ";base64,"
 					+ new String(Base64.getEncoder().encode(user.getAvatar()));
+		} else {
+			avatar = "/images/avatars/avatar-01.jpg";
 		}
 
 		model.addAttribute("avatar", avatar);

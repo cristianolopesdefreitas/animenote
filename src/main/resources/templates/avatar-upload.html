@@ -2,18 +2,27 @@
 <html lang="pt-BR">
 <head th:replace="fragments/fragments :: head (title = 'Atualizar avatar')"></head>
 <body>
-	<form th:action="@{/atualizar-avatar}" method="post" enctype="multipart/form-data">
-		<span th:text="${error}"></span>
-		<span th:text="${success}"></span>
-		<div>
-			<label for="avatar">Avatar:</label>
-			<input type="file" name="avatar" id="avatar" />
+	<header th:replace="fragments/fragments :: internalHeader"></header>
+
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
+					<form th:action="@{/atualizar-avatar}" method="post" enctype="multipart/form-data">
+						<div class="alert alert-danger" th:if="${error}" th:text="${error}"></div>
+						<div class="alert alert-success" th:if="${success}" th:text="${success}"></div>
+
+						<div class="form-group">
+							<label for="avatar">Avatar:</label>
+							<input type="file" name="avatar" id="avatar" class="form-control" />
+						</div>
+						<button type="submit" class="btn btn-block btn-primary">Atualizar</button>
+					</form>
+				</div>
+			</div>
 		</div>
-		<button type="submit">Atualizar</button>
-	</form>
-	
-	<a th:href="@{/}">Voltar</a>
-	
+	</main>
+
 	<footer th:replace="fragments/fragments :: footer"></footer>
 </body>
 </html>

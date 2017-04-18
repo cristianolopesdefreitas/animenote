@@ -17,8 +17,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.animenote.constants.Status;
@@ -52,6 +54,7 @@ public class Anime implements Serializable {
 //	private Short releaseYear;
 	
 	@Valid
+	@NotBlank
 	@DateTimeFormat(pattern="yyyy")
 	@Column(nullable = false)
 	private Calendar releaseYear;
@@ -66,6 +69,7 @@ public class Anime implements Serializable {
 	private String resume;
 	
 	@Valid
+	@NotEmpty
 	@ManyToMany(targetEntity = AnimeCategory.class)
 	@JoinTable(name = "tb_anime_and_anime_category", joinColumns = {
 			@JoinColumn(name = "anime_id", nullable = false) }, inverseJoinColumns = {
@@ -79,6 +83,7 @@ public class Anime implements Serializable {
 //	private Set<AnimeCreator> animeCreator;
 	
 	@Valid
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "anime_creator_id", nullable = false, referencedColumnName = "id")
 	private AnimeCreator animeCreator;

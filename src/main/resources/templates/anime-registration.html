@@ -10,19 +10,19 @@
 				<div class="col-xs-12 col-sm-6 col-md-4 col-sm-offset-3 col-md-offset-4">
 					<form th:object="${anime}" th:action="@{/cadastrar-anime}" method="post" enctype="multipart/form-data">
 						<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? has-error : ''">
-							<label for="name">Nome:</label>
+							<label for="name">Nome: <abbr title="Campo Obrigatório">*</abbr></label>
 							<input type="text" th:field="*{name}" id="name" class="form-control" />
 							<span th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="help-block"></span>
 						</div>
 
 						<div class="form-group" th:classappend="${error} ? has-error : ''">
-							<label for="anime-image">Imagem:</label>
+							<label for="anime-image">Imagem: <abbr title="Campo Obrigatório">*</abbr></label>
 							<input type="file" name="animeImage" id="anime-image" class="form-control" />
 							<span th:if="${error}" th:text="${error}" class="help-block"></span>
 						</div>
 
 						<div class="form-group" th:classappend="${#fields.hasErrors('releaseYear')} ? has-error : ''">
-							<label for="release-year">Ano de Lançamento:</label>
+							<label for="release-year">Ano de Lançamento: <abbr title="Campo Obrigatório">*</abbr></label>
 							<input type="text" th:field="*{releaseYear}" id="release-year" class="form-control" />
 							<span th:if="${#fields.hasErrors('releaseYear')}" th:errors="*{releaseYear}" class="help-block"></span>
 						</div>
@@ -34,30 +34,30 @@
 						</div>
 
 						<div class="form-group" th:classappend="${#fields.hasErrors('resume')} ? has-error : ''">
-							<label for="resume">Sinopse:</label>
+							<label for="resume">Sinopse: <abbr title="Campo Obrigatório">*</abbr></label>
 							<textarea th:field="*{resume}" id="resume" class="form-control"></textarea>
 							<span th:if="${#fields.hasErrors('resume')}" th:errors="*{resume}" class="help-block"></span>
 						</div>
 
 						<div class="form-group" th:classappend="${#fields.hasErrors('animeCreator')} ? has-error : ''">
-							<label>Criador:</label>
+							<label>Criador: <abbr title="Campo Obrigatório">*</abbr></label>
 							<ul class="list-unstyled">
 								<li th:each="animeCreator : ${animeCreators}">
-									<input type="radio"  th:id="${animeCreator.id}" th:field="*{animeCreator}" th:value="${animeCreator.id}"/>
-									<label th:for="${animeCreator.id}" th:text="${animeCreator.name}"></label>
+									<input type="radio"  th:id="${'anime-creator-' + animeCreator.id}" th:field="*{animeCreator}" th:value="${animeCreator.id}"/>
+									<label th:for="${'anime-creator-' + animeCreator.id}" th:text="${animeCreator.name}"></label>
 								</li>
-								<li th:if="${#fields.hasErrors('animeCategories')}">
-									<span th:errors="{*animeCategories}" class="help-block"></span>
+								<li th:if="${#fields.hasErrors('animeCreator')}">
+									<span th:errors="*{animeCreator}" class="help-block"></span>
 								</li>
 							</ul>
 						</div>
 
 						<div class="form-group" th:classappend="${#fields.hasErrors('animeCategories')} ? has-error : ''">
-							<label>Categoria:</label>
+							<label>Categoria: <abbr title="Campo Obrigatório">*</abbr></label>
 							<ul class="list-unstyled">
 								<li th:each="animeCategory : ${animeCategories}">
-									<input type="checkbox"  th:id="${animeCategory.id}" th:field="*{animeCategories}" th:value="${animeCategory.id}"/>
-									<label th:for="${animeCategory.id}" th:text="${animeCategory.category}"></label>
+									<input type="checkbox"  th:id="${'anime-category-' + animeCategory.id}" th:field="*{animeCategories}" th:value="${animeCategory.id}"/>
+									<label th:for="${'anime-category-' + animeCategory.id}" th:text="${animeCategory.category}"></label>
 								</li>
 								<li th:if="${#fields.hasErrors('animeCategories')}">
 									<span th:errors="*{animeCategories}" class="help-block"></span>

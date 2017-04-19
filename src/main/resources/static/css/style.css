@@ -8,8 +8,10 @@ body {
 }
 
 footer {
+    background-color: rgba(255, 255, 255, 0.8);
     bottom: 0;
     height: 30px;
+    padding: 5px 0;
     position: absolute;
     width: 100%;
 }
@@ -17,4 +19,28 @@ footer {
 .timeline-avatar {
     max-width: 100px;
     max-height: 100px;
+}
+
+.background-full {
+    background-size: cover;
+}
+
+#login {
+    background-image: url('../images/background-01.jpg');
+}
+
+#user-registration {
+    background-image: url('../images/background-02.jpg');
+}
+
+#forgot-my-password {
+    background-image: url('../images/background-03.jpg');
+}
+
+#confirmation-account-success {
+    background-image: url('../images/background-04.jpg');
+}
+
+#confirmation-account-error {
+    background-image: url('../images/background-05.jpg');
 }

@@ -1,12 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head th:replace="fragments/fragments :: head (title = 'Confirmação de conta')"></head>
-<body>
-    <h1>Sua conta foi confirmada com sucesso!</h1>
-    <p>
-    	<a href="/">Comece a aproveitar.</a>
-    </p>
-    
+<body id="confirmation-account-success" class="background-full">
+    <header th:replace="fragments/fragments :: externalHeader"></header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                    <div class="alert alert-success">
+                        <p class="text-center">
+                            <strong>Sua conta foi confirmada com sucesso!</strong>
+                        </p>
+                    </div>
+                    <a href="/" class="btn btn-block btn-success">Comece a aproveitar.</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <footer th:replace="fragments/fragments :: footer"></footer>
 </body>
 </html>

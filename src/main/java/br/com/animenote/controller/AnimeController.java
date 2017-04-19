@@ -55,15 +55,11 @@ public class AnimeController {
 
 	@PostMapping("/cadastrar-anime")
 	public String animeRegistration(@Valid Anime anime, BindingResult result, @RequestParam("animeImage") MultipartFile animeImage, Model model) {
-		if (result.hasErrors()) {
-			return this.animeRegistrationScreen(anime, model);
-		}
-		
 		if (animeImage.isEmpty() || animeImage.getSize() == 0) {
 			model.addAttribute("error", "Por favor insira uma imagem.");
 			return this.animeRegistrationScreen(anime, model);
 		}
-
+		
 		if (!(animeImage.getContentType().toLowerCase().equals("image/jpg")
 				|| animeImage.getContentType().toLowerCase().equals("image/jpeg")
 				|| animeImage.getContentType().toLowerCase().equals("image/png"))) {
@@ -75,6 +71,10 @@ public class AnimeController {
 			model.addAttribute("error", "O tamanho da imagem não pode passar de 1MB.");
 			return this.animeRegistrationScreen(anime, model);
 		}
+		
+		if (result.hasErrors()) {
+			return this.animeRegistrationScreen(anime, model);
+		}		
 		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -92,6 +92,8 @@ public class AnimeController {
 			model.addAttribute("error", "Ocorreu um erro com o upload da imagem, tente novamente.");
 			return this.animeRegistrationScreen(anime, model);
 		}
+		
+		animeService.save(anime);
 
 		return "redirect:/animes-cadastrados";
 	}

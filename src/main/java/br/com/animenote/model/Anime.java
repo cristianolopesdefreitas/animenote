@@ -54,7 +54,7 @@ public class Anime implements Serializable {
 //	private Short releaseYear;
 	
 	@Valid
-	@NotBlank
+	@NotNull
 	@DateTimeFormat(pattern="yyyy")
 	@Column(nullable = false)
 	private Calendar releaseYear;

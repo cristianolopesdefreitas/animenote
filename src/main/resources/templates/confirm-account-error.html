@@ -1,9 +1,24 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head th:replace="fragments/fragments :: head (title = 'Confirmação de conta')"></head>
-<body>
-    <h1>Conta não existente.</h1>
-    
+<body id="confirmation-account-error" class="background-full">
+    <header th:replace="fragments/fragments :: externalHeader"></header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4">
+                    <div class="alert alert-warning">
+                        <p class="text-center">
+                            <strong>Conta não existente.</strong>
+                        </p>
+                    </div>
+                    <a href="/cadastro" class="btn btn-block btn-primary">Faça seu cadastro</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
     <footer th:replace="fragments/fragments :: footer"></footer>
 </body>
 </html>

@@ -65,7 +65,7 @@ public class Anime implements Serializable {
 	
 	@Valid
 	@NotBlank
-	@Column(nullable = true, columnDefinition = "text")
+	@Column(nullable = false, columnDefinition = "text")
 	private String resume;
 	
 	@Valid

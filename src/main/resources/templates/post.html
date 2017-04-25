@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Postagem')"></head>
+<body>
+    <header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="well">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-3 text-center">
+                                <img th:src="${avatar}" th:alt="${userPost.user.name}" class="img-circle" />
+                                <h3 th:text="${userPost.user.name}"></h3>
+                                <strong>Data da Postagem: <span th:text="${postDate}"></span></strong>
+                            </div>
+                            <div class="col-xs-12 col-sm-9">
+                                <div th:utext="${userPost.post}"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

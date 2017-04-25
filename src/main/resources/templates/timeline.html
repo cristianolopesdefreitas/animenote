@@ -16,6 +16,11 @@
                         <h2 th:text="${user.name}"></h2>
                     </div>
                     <div class="list-group">
+                        <a href="/postagem" class="list-group-item list-group-item-success text-center">
+                            <i class="glyphicon glyphicon-pencil"></i> Escrever Postagem
+                        </a>
+                    </div>
+                    <div class="list-group">
                         <a href="#" class="list-group-item">
                             <span class="badge">200</span>Seguindo
                         </a>
@@ -27,7 +32,11 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-9"></div>
+                <div class="col-xs-12 col-sm-9">
+                    <ul th:if="${posts != null}">
+                        <li th:each="post : ${posts}" th:text="${post.post}"></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </main>

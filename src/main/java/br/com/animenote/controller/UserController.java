@@ -19,12 +19,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.animenote.model.User;
+import br.com.animenote.service.UserPostService;
 import br.com.animenote.service.UserService;
 
 @Controller
 public class UserController {
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	UserPostService userPostService;
 	
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -48,6 +52,8 @@ public class UserController {
 		}
 
 		model.addAttribute("avatar", avatar);
+		
+		model.addAttribute("posts", userPostService.findAssociatedPosts(user.getId()));
 
 		return "timeline";
 	}

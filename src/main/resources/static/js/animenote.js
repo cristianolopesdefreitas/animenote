@@ -2,7 +2,7 @@
     'user strict';
 
     function init() {
-        $( '#post' ).summernote({
+        $( '#resume, #post' ).summernote({
             focus: true,
             height: 300,
             lang: 'pt-BR',

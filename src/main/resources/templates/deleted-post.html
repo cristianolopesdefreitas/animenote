@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Postagem Deletada')"></head>
+<body>
+	<header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-info" th:text="${message}"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

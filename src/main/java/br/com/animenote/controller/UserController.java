@@ -26,10 +26,10 @@ import br.com.animenote.service.UserService;
 public class UserController {
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	UserPostService userPostService;
-	
+
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
@@ -47,13 +47,12 @@ public class UserController {
 		if (user.getAvatar() != null) {
 			avatar = "data:" + user.getAvatarType() + ";base64,"
 					+ new String(Base64.getEncoder().encode(user.getAvatar()));
-		} else {
-			avatar = "/images/avatars/avatar-01.jpg";
 		}
 
 		model.addAttribute("avatar", avatar);
-		
-		model.addAttribute("posts", userPostService.findAssociatedPosts(user.getId()));
+
+		//model.addAttribute("posts", userPostService.findAssociatedPosts(user.getId()));
+		model.addAttribute("posts", userPostService.findAll());
 
 		return "timeline";
 	}
@@ -138,30 +137,30 @@ public class UserController {
 	public String changePasswordSave(@RequestParam("password") String password,
 			@RequestParam("newPassword") String newPassword,
 			@RequestParam("newPasswordConfirmation") String newPasswordConfirmation, Model model) {
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
 		User user = userService.findByUsername(userDetails.getUsername());
-		
+
 		if (!bCryptPasswordEncoder.matches(password, user.getPassword())) {
 			model.addAttribute("error", "Senha incorreta.");
 			return this.changePasswordScreen(model);
 		}
-		
+
 		if (newPassword.length() < 8) {
 			model.addAttribute("error", "Sua senha deve conter pelo menos 8 caracteres.");
 			return this.changePasswordScreen(model);
 		}
-		
+
 		if (!newPassword.equals(newPasswordConfirmation)) {
 			model.addAttribute("error", "A nova senha não é equivalente à sua confirmação.");
 			return this.changePasswordScreen(model);
 		}
-		
+
 		userService.changePassword(user.getId(), newPassword);
 		model.addAttribute("success", "Sua senha foi alterada com sucesso!");
-		
+
 		return this.changePasswordScreen(model);
 	}
 }

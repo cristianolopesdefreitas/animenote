@@ -1,6 +1,6 @@
 package br.com.animenote.service;
 
-import java.util.HashSet;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,8 +26,18 @@ public class UserPostService {
 		return userPostRepository.findById(id);
 	}
 	
-	public HashSet<UserPost> findAssociatedPosts(Long id) {
+	public List<UserPost> findAssociatedPosts(Long id) {
 		LOGGER.info("Buscando postagens para a timeline");
 		return userPostRepository.findAssociatedPosts(id);
+	}
+	
+	public List<UserPost> findAll() {
+		LOGGER.info("Buscando todas as postagens para a timeline");
+		return userPostRepository.findAll();
+	}
+	
+	public int disablePost(Long id) {
+		LOGGER.info("Desabilitanto postagem");
+		return userPostRepository.disablePost(id);
 	}
 }

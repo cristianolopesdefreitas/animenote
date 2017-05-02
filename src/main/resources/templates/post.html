@@ -11,7 +11,8 @@
                     <div class="well">
                         <div class="row">
                             <div class="col-xs-12 col-sm-3 text-center">
-                                <img th:src="${avatar}" th:alt="${userPost.user.name}" class="img-circle" />
+                                <img th:if="${avatar}" th:src="${avatar}" th:alt="${userPost.user.name}" class="img-circle" />
+                                <img th:unless="${avatar}" src="/images/avatars/avatar-01.jpg" th:alt="${userPost.user.name}" class="img-circle" />
                                 <h3 th:text="${userPost.user.name}"></h3>
                                 <strong>Data da Postagem: <span th:text="${postDate}"></span></strong>
                             </div>

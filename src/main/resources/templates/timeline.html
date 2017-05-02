@@ -10,8 +10,8 @@
                 <div class="col-xs-12 col-sm-3">
                     <div class="text-center">
                         <a th:href="@{/atualizar-avatar}">
-                            <!-- <img th:if="${user?.avatar}" th:src="${avatar}" th:alt="${user.name}" class="img-circle timeline-avatar" /> -->
-                            <img th:src="${avatar}" th:alt="${user.name}" class="img-circle timeline-avatar" />
+                            <img th:if="${avatar}" th:src="${avatar}" th:alt="${user.name}" class="img-circle timeline-avatar" />
+                            <img th:unless="${avatar}" src="/images/avatars/avatar-01.jpg" th:alt="${user.name}" class="img-circle timeline-avatar" />
                         </a>
                         <h2 th:text="${user.name}"></h2>
                     </div>
@@ -33,9 +33,20 @@
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-9">
-                    <ul th:if="${posts != null}">
-                        <li th:each="post : ${posts}" th:text="${post.post}"></li>
-                    </ul>
+                    <div class="panel panel-default" th:if="${posts != null}" th:each="post : ${posts}">
+                        <div class="panel-heading">
+                            <strong th:text="${post.user.name}"></strong> postou em <strong th:text="${#dates.format(post.postDate, 'HH:mm - dd/MM/yyyy')}"></strong>
+                        </div>
+                        <div class="panel-body" th:utext="${post.post}"></div>
+                        <div class="panel-footer">
+                            <div class="btn-group" role="group" aria-label="...">
+                                <a th:href="${'/postagem/' + post.id}" class="btn btn-default">Comentar</a>
+                                <a th:href="${'/postagem/' + post.id}" class="btn btn-default">Denunciar</a>
+                                <a th:href="${'/editar-postagem/' + post.id}" class="btn btn-default" th:if="${user.id == post.user.id}">Editar</a>
+                                <a th:href="${'/excluir-postagem/' + post.id}" class="btn btn-default" th:if="${user.id == post.user.id}">Deletar</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

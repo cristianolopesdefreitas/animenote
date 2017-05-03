@@ -1,6 +1,7 @@
 package br.com.animenote.model;
 
 import java.io.Serializable;
+import java.util.Calendar;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,11 +14,17 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import br.com.animenote.constants.Status;
 
 @Entity(name = "tb_user_post_comment")
 public class UserPostComment implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	public UserPostComment() {
+		this.status = Status.A;
+	}
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,7 +39,11 @@ public class UserPostComment implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
-    private UserPost post;
+    private UserPost userPost;
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm")
+	@Column(nullable = true)
+	private Calendar commentDate;
 	
 	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'A'")
 	@Enumerated(EnumType.STRING)
@@ -62,12 +73,12 @@ public class UserPostComment implements Serializable {
 		this.user = user;
 	}
 
-	public UserPost getPost() {
-		return post;
+	public UserPost getUserPost() {
+		return userPost;
 	}
 
-	public void setPost(UserPost post) {
-		this.post = post;
+	public void setUserPost(UserPost userPost) {
+		this.userPost = userPost;
 	}
 
 	public Status getStatus() {
@@ -76,6 +87,14 @@ public class UserPostComment implements Serializable {
 
 	public void setStatus(Status status) {
 		this.status = status;
+	}
+
+	public Calendar getCommentDate() {
+		return commentDate;
+	}
+
+	public void setCommentDate(Calendar commentDate) {
+		this.commentDate = commentDate;
 	}
 	
 }

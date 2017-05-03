@@ -40,8 +40,8 @@
                         <div class="panel-body" th:utext="${post.post}"></div>
                         <div class="panel-footer">
                             <div class="btn-group" role="group" aria-label="...">
-                                <a th:href="${'/postagem/' + post.id}" class="btn btn-default">Comentar</a>
-                                <a th:href="${'/postagem/' + post.id}" class="btn btn-default">Denunciar</a>
+                                <a th:href="${'/visualizar-postagem/' + post.id}" class="btn btn-default">Comentar</a>
+                                <a th:href="${'/denunciar-postagem/' + post.id}" class="btn btn-default">Denunciar</a>
                                 <a th:href="${'/editar-postagem/' + post.id}" class="btn btn-default" th:if="${user.id == post.user.id}">Editar</a>
                                 <a th:href="${'/excluir-postagem/' + post.id}" class="btn btn-default" th:if="${user.id == post.user.id}">Deletar</a>
                             </div>

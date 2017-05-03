@@ -2,29 +2,52 @@
 <html lang="pt-BR">
 <head th:replace="fragments/fragments :: head (title = 'Postagem')"></head>
 <body>
-    <header th:replace="fragments/fragments :: internalHeader"></header>
+	<header th:replace="fragments/fragments :: internalHeader"></header>
 
-    <main>
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="well">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-3 text-center">
-                                <img th:if="${avatar}" th:src="${avatar}" th:alt="${userPost.user.name}" class="img-circle" />
-                                <img th:unless="${avatar}" src="/images/avatars/avatar-01.jpg" th:alt="${userPost.user.name}" class="img-circle" />
-                                <h3 th:text="${userPost.user.name}"></h3>
-                                <strong>Data da Postagem: <span th:text="${postDate}"></span></strong>
-                            </div>
-                            <div class="col-xs-12 col-sm-9">
-                                <div th:utext="${userPost.post}"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </main>
+	<main>
+	<div class="container">
+		<div class="row">
+			<div class="col-xs-12">
+				<div class="well">
+					<div class="row">
+						<div class="col-xs-12 col-sm-3 text-center">
+							<img th:if="${avatar}" th:src="${avatar}"
+								th:alt="${userPost.user.name}" class="img-circle" /> <img
+								th:unless="${avatar}" src="/images/avatars/avatar-01.jpg"
+								th:alt="${userPost.user.name}" class="img-circle" />
+							<h3 th:text="${userPost.user.name}"></h3>
+							<strong>Data da Postagem: <span th:text="${#dates.format(userPost.postDate, 'HH:mm - dd/MM/yyyy')}"></span></strong>
+						</div>
+						<div class="col-xs-12 col-sm-9">
+							<div th:utext="${userPost.post}"></div>
+							<hr />
+							<form th:object="${userPostComment}"
+								th:action="${'/visualizar-postagem/' + userPost.id}"
+								method="post">
+								<div class="form-group">
+									<label for="comment">Faça um comentário:</label>
+									<textarea name="comment" id="comment" th:field="*{comment}"
+										class="form-control"></textarea>
+								</div>
+								<input type="hidden" name="postId" th:value="${userPost.id}" />
+								<button type="submit" class="btn btn-block btn-primary">Enviar</button>
+							</form>
+							<hr />
+							<ul class="list-unstyled" th:if="${userPostComments != null}"
+								th:each="comment : ${userPostComments}">
+								<li><strong
+									th:text="${comment.user.name}"></strong> comentou em <strong
+									th:text="${#dates.format(comment.commentDate, 'HH:mm - dd/MM/yyyy')}"></strong>
+									<p th:text="${comment.comment}"></p>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	</main>
 
 	<footer th:replace="fragments/fragments :: footer"></footer>
 </body>

@@ -12,7 +12,6 @@
 						<div class="panel-body">
 							<form th:object="${userPost}" th:action="@{/postagem}" method="post">
 								<div class="alert alert-danger text-center" th:if="${error}" th:text="${error}"></div>
-								<div class="alert alert-success text-center" th:if="${success}" th:text="${success}"></div>
 
 								<input type="hidden" th:if="*{id}" th:field="*{id}" />
 								<div class="form-group" th:classappend="${#fields.hasErrors('post')} ? has-error : ''">

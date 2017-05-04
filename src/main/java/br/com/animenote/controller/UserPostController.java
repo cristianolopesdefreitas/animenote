@@ -60,9 +60,7 @@ public class UserPostController {
 
 		userPostService.savePost(userPost);
 
-		model.addAttribute("success", "Postagem salva com sucesso!");
-
-		return this.writePost(new UserPost(), model);
+		return "redirect:/";
 	}
 
 	@GetMapping("/visualizar-postagem/{id}")
@@ -89,7 +87,7 @@ public class UserPostController {
 		return "post";
 	}
 	
-	@PostMapping("/visualizar-postagem/{id}")
+	@PostMapping("/visualizar-postagem")
 	public String savePostComment(@Valid UserPostComment userPostComment, @RequestParam("postId") Long postId, BindingResult result, Model model) {
 		if (result.hasErrors()) {
 			return "redirect:/visualizar-postagem/" + postId;

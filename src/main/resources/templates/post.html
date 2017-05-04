@@ -22,7 +22,7 @@
 							<div th:utext="${userPost.post}"></div>
 							<hr />
 							<form th:object="${userPostComment}"
-								th:action="${'/visualizar-postagem/' + userPost.id}"
+								th:action="${'/visualizar-postagem'}"
 								method="post">
 								<div class="form-group">
 									<label for="comment">Faça um comentário:</label>
@@ -35,10 +35,15 @@
 							<hr />
 							<ul class="list-unstyled" th:if="${userPostComments != null}"
 								th:each="comment : ${userPostComments}">
-								<li><strong
-									th:text="${comment.user.name}"></strong> comentou em <strong
-									th:text="${#dates.format(comment.commentDate, 'HH:mm - dd/MM/yyyy')}"></strong>
-									<p th:text="${comment.comment}"></p>
+								<li>
+									<div class="panel panel-default">
+										<div class="panel-heading">
+											<strong th:text="${comment.user.name}"></strong> comentou em <strong th:text="${#dates.format(comment.commentDate, 'HH:mm - dd/MM/yyyy')}"></strong>
+										</div>
+										<div class="panel-body">
+											<p th:text="${comment.comment}"></p>
+										</div>
+									</div>
 								</li>
 							</ul>
 						</div>

@@ -8,7 +8,9 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
-					<form th:object="${anime}" th:action="@{/cadastrar-anime}" method="post" enctype="multipart/form-data">
+					<form th:object="${anime}" th:action="@{anime.id == null ? '/cadastrar-anime' : '/editar-anime'}" method="post" enctype="multipart/form-data">
+						<input type="hidden" th:if="*{id}" th:field="*{id}" />
+
 						<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? has-error : ''">
 							<label for="name">Nome: <abbr title="Campo Obrigatório">*</abbr></label>
 							<input type="text" th:field="*{name}" id="name" class="form-control" />
@@ -16,13 +18,6 @@
 						</div>
 
 						<div class="row">
-							<div class="col-xs-12 col-sm-4">
-								<div class="form-group" th:classappend="${error} ? has-error : ''">
-									<label for="anime-image">Imagem: <abbr title="Campo Obrigatório">*</abbr></label>
-									<input type="file" name="animeImage" id="anime-image" class="form-control" />
-									<span th:if="${error}" th:text="${error}" class="help-block"></span>
-								</div>
-							</div>
 							<div class="col-xs-12 col-sm-4">
 								<div class="form-group" th:classappend="${#fields.hasErrors('releaseYear')} ? has-error : ''">
 									<label for="release-year">Ano de Lançamento: <abbr title="Campo Obrigatório">*</abbr></label>
@@ -35,6 +30,19 @@
 									<label for="episode-numbers">Número de Episódios:</label>
 									<input type="text" th:field="*{episodeNumbers}" id="episode-numbers" class="form-control" />
 									<span th:if="${#fields.hasErrors('episodeNumbers')}" th:errors="*{episodeNumbers}" class="help-block"></span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4" th:if="*{id == null}">
+								<div class="form-group" th:classappend="${error} ? has-error : ''">
+									<label for="anime-image">Imagem: <abbr title="Campo Obrigatório">*</abbr></label>
+									<input type="file" name="animeImage" id="anime-image" class="form-control" />
+									<span th:if="${error}" th:text="${error}" class="help-block"></span>
+								</div>
+							</div>
+							<div class="col-xs-12 col-sm-4" th:if="*{id}">
+								<div class="form-group">
+									<label>Imagem:</label>
+									<a th:href="${'/alterar-imagem-anime/' + anime.id}" class="center-block">Enviar nova imagem</a>
 								</div>
 							</div>
 						</div>

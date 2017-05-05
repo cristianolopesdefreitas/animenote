@@ -19,7 +19,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.animenote.model.User;
+import br.com.animenote.service.AnimeService;
 import br.com.animenote.service.UserPostService;
+import br.com.animenote.service.UserRelationshipService;
 import br.com.animenote.service.UserService;
 
 @Controller
@@ -29,6 +31,12 @@ public class UserController {
 
 	@Autowired
 	UserPostService userPostService;
+	
+	@Autowired
+	AnimeService animeService;
+	
+	@Autowired
+	UserRelationshipService userRelationshipService;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -53,6 +61,9 @@ public class UserController {
 
 		//model.addAttribute("posts", userPostService.findAssociatedPosts(user.getId()));
 		model.addAttribute("posts", userPostService.findAll());
+		model.addAttribute("registeredAnimesQuantity", animeService.findByUser(user).size());
+		model.addAttribute("followerQuantity", userRelationshipService.findByFollower(user).size());
+		model.addAttribute("followedQuantity", userRelationshipService.findByFollowed(user).size());
 
 		return "timeline";
 	}

@@ -1,13 +1,13 @@
 package br.com.animenote.service;
 
-import org.springframework.stereotype.Service;
-
-import br.com.animenote.model.Anime;
-import br.com.animenote.repository.AnimeRepository;
-
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import br.com.animenote.model.Anime;
+import br.com.animenote.model.User;
+import br.com.animenote.repository.AnimeRepository;
 
 @Service
 public class AnimeService {
@@ -18,8 +18,8 @@ public class AnimeService {
 		return animeRepository.findAll();
 	}
 
-	public Anime findOne(Long id) {
-		return animeRepository.findOne(id);
+	public Anime findById(Long id) {
+		return animeRepository.findById(id);
 	}
 
 	public Anime save(Anime anime) {
@@ -30,7 +30,7 @@ public class AnimeService {
 		animeRepository.delete(id);
 	}
 	
-	public List<Anime> findByUserId(Long id) {
-		return animeRepository.findByUserId(id);
+	public List<Anime> findByUser(User user) {
+		return animeRepository.findByUser(user);
 	}
 }

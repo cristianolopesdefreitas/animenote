@@ -23,12 +23,12 @@ public class UserPostService {
 	
 	public UserPost findById(Long id) {
 		LOGGER.info("Buscando postagem pelo id");
-		return userPostRepository.findById(id);
+		return userPostRepository.findOne(id);
 	}
 	
 	public List<UserPost> findAssociatedPosts(Long id) {
 		LOGGER.info("Buscando postagens para a timeline");
-		return userPostRepository.findAssociatedPosts(id);
+		return null;//userPostRepository.findAssociatedPosts(id);
 	}
 	
 	public List<UserPost> findAll() {

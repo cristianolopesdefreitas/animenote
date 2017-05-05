@@ -1,6 +1,7 @@
 package br.com.animenote.controller;
 
 import java.io.IOException;
+import java.util.Base64;
 
 import javax.validation.Valid;
 
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -42,6 +44,23 @@ public class AnimeController {
 		model.addAttribute("animes", animeService.findAll());
 
 		return "animes";
+	}
+	
+	@GetMapping("/anime/{id}")
+	public String showAnime(@PathVariable Long id, Model model) {
+		Anime anime = animeService.findById(id);
+		
+		if ( anime != null ) {
+			String animeImage = "data:" + anime.getImageType() + ";base64,"
+						+ new String(Base64.getEncoder().encode(anime.getImage()));
+			
+			model.addAttribute("animeImage", animeImage);
+			model.addAttribute("anime", anime);
+		} else {
+			model.addAttribute("message", "Anime não encontrado.");
+		}
+		
+		return "anime";		
 	}
 
 	@GetMapping("/cadastrar-anime")
@@ -97,6 +116,26 @@ public class AnimeController {
 
 		return "redirect:/animes-cadastrados";
 	}
+	
+	@GetMapping("/editar-anime/{id}")
+	public String editAnimeScreen(@PathVariable Long id, Model model) {
+		Anime anime = animeService.findById(id);
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		User user = userService.findByUsername(userDetails.getUsername());
+		
+		if (anime.getUser().getId() == user.getId()) {
+			model.addAttribute("anime", anime);
+			model.addAttribute("animeCategories", animeCategoryService.findAll());
+			model.addAttribute("animeCreators", animeCreatorService.findAll());
+		} else {
+			model.addAttribute("error", "Anime não encontrado.");
+		}
+		
+		return "anime-registration";
+	}
 
 	@GetMapping("/animes-cadastrados")
 	public String add(Model model) {
@@ -105,7 +144,8 @@ public class AnimeController {
 
 		User user = userService.findByUsername(userDetails.getUsername());
 		
-		model.addAttribute("anime", animeService.findByUserId(user.getId()));
+		model.addAttribute("user", user);
+		model.addAttribute("animes", animeService.findByUser(user));
 
 		return "registered-animes";
 	}

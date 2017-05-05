@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class AnimenoteApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(AnimenoteApplication.class, args);
+		SpringApplication.run(ApplicationConfig.class, args);
 	}
 }

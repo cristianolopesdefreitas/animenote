@@ -4,6 +4,47 @@
 <body>
 	<header th:replace="fragments/fragments :: internalHeader"></header>
 
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12 col-sm-3" th:if="${animes != null}" th:each="anime : ${animes}">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 th:text="${anime.name}"></h4>
+						</div>
+						<div class="panel-body">
+							<div class="col-xs-12">
+								<dl>
+									<dt>Cadastrador:</dt>
+									<dd>
+										<a th:href="${'/perfil/' + anime.user.username}" th:text="${anime.user.name}"></a>
+									</dd>
+									<dt>Criador:</dt>
+									<dd th:text="${anime.animeCreator.name}"></dd>
+									<dt>Ano de Lançamento:</dt>
+									<dd th:text="${#dates.format(anime.releaseYear, 'yyyy')}"></dd>
+									<dt>Número de Episódios:</dt>
+									<dd th:if="${anime.episodeNumbers}" th:text="${anime.episodeNumbers}"></dd>
+									<dd th:unless="${anime.episodeNumbers}">Em lançamento</dd>
+									<dt>Categoria(s):</dt>
+									<dd>
+										<span class="badge" th:each="category : ${anime.animeCategories}" th:text="${category.category}"></span>
+									</dd>
+								</dl>
+							</div>
+						</div>
+						<div class="panel-footer">
+							<div class="btn-group">
+								<a th:href="${'/anime/' + anime.id}" class="btn btn-default btn-success">Visualizar</a>
+								<a th:href="${'/editar-anime/' + anime.id}" class="btn btn-default btn-primary" th:if="${user.id == anime.user.id}">Editar</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
 	<footer th:replace="fragments/fragments :: footer"></footer>
 </body>
 </html>

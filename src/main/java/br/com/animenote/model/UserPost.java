@@ -1,6 +1,5 @@
 package br.com.animenote.model;
 
-import java.io.Serializable;
 import java.util.Calendar;
 
 import javax.persistence.Column;
@@ -8,28 +7,25 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.animenote.constants.Status;
+import br.com.animenote.utils.BaseEntity;
 
-@Entity(name = "tb_user_post")
-public class UserPost implements Serializable {
+@Entity
+@Table(name = "tb_user_post")
+public class UserPost extends BaseEntity<Long> {
+	
 	private static final long serialVersionUID = 1L;
 	
 	public UserPost() {
 		this.status = Status.A;
 	}
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
 	
 	@NotEmpty
 	@Column(nullable = false, columnDefinition = "text")
@@ -46,14 +42,6 @@ public class UserPost implements Serializable {
 	@DateTimeFormat(pattern="yyyy-MM-dd hh:mm")
 	@Column(nullable = true)
 	private Calendar postDate;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getPost() {
 		return post;

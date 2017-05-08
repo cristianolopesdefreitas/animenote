@@ -26,9 +26,9 @@ public class UserPostService {
 		return userPostRepository.findOne(id);
 	}
 	
-	public List<UserPost> findAssociatedPosts(Long id) {
+	public List<UserPost> findAssociatedPosts() {
 		LOGGER.info("Buscando postagens para a timeline");
-		return null;//userPostRepository.findAssociatedPosts(id);
+		return userPostRepository.findAssociatedPosts();
 	}
 	
 	public List<UserPost> findAll() {

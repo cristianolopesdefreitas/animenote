@@ -7,8 +7,9 @@
     <main>
         <div class="container">
             <div class="row">
-                <div class="col-xs-12">
-                    <div class="alert alert-info" th:text="${message}"></div>
+                <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+                    <div class="alert alert-info text-center" th:text="${message}"></div>
+					<a th:href="${'/'}" class="btn btn-block btn-primary">Voltar para timeline</a>
                 </div>
             </div>
         </div>

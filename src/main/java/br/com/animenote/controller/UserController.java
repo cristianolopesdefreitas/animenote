@@ -58,9 +58,8 @@ public class UserController {
 		}
 
 		model.addAttribute("avatar", avatar);
-
-		//model.addAttribute("posts", userPostService.findAssociatedPosts(user.getId()));
-		model.addAttribute("posts", userPostService.findAll());
+		
+		model.addAttribute("posts", userPostService.findAssociatedPosts());
 		model.addAttribute("registeredAnimesQuantity", animeService.findByUser(user).size());
 		model.addAttribute("followerQuantity", userRelationshipService.findByFollower(user).size());
 		model.addAttribute("followedQuantity", userRelationshipService.findByFollowed(user).size());

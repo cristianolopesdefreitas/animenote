@@ -16,6 +16,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
@@ -25,7 +26,8 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import br.com.animenote.constants.Status;
 
-@Entity(name = "tb_anime")
+@Entity
+@Table(name = "tb_anime")
 public class Anime implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

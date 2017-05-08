@@ -8,8 +8,9 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-xs-12">
-					<form th:object="${anime}" th:action="@{anime.id == null ? '/cadastrar-anime' : '/editar-anime'}" method="post" enctype="multipart/form-data">
-						<input type="hidden" th:if="*{id}" th:field="*{id}" />
+					<form th:object="${anime}" th:action="${anime.id == null ? '/cadastrar-anime' : '/editar-anime/' + anime.id}" method="post" enctype="multipart/form-data">
+						<div class="alert alert-danger text-center" th:if="${error}" th:text="${error}"></div>
+						<div class="alert alert-success text-center" th:if="${success}" th:text="${success}"></div>
 
 						<div class="form-group" th:classappend="${#fields.hasErrors('name')} ? has-error : ''">
 							<label for="name">Nome: <abbr title="Campo Obrigatório">*</abbr></label>

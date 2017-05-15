@@ -25,6 +25,18 @@ public class UserPostCommentReport implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_post_comment_id", nullable = false)
     private UserPostComment userPostCommentId;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "user_report_id", nullable = false)
+	private User userReport;
+
+	public User getUserReport() {
+		return userReport;
+	}
+
+	public void setUserReport(User userReport) {
+		this.userReport = userReport;
+	}
 
 	public Long getId() {
 		return id;

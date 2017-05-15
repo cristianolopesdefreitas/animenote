@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Denunciar Postagem')"></head>
+<body>
+    <header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+                    <form th:action="${action}" method="POST" novalidate="novalidate">
+                        <div class="form-group">
+                            <label for="report">Denúncia:</label>
+                            <textarea name="report" id="report" required="required"></textarea>
+                        </div>
+                        <button type="submit">Fazer Denúncia</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

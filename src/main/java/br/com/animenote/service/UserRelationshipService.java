@@ -18,11 +18,16 @@ public class UserRelationshipService {
 	
 	public List<User> findByFollower(User follower) {
 		LOGGER.info("Buscando seguidores de");
-		return userRelationshipRepository.findByFollower(follower);
+		return userRelationshipRepository.findFollowedByFollower(follower);
 	}
 	
 	public List<User> findByFollowed(User followed) {
 		LOGGER.info("Buscando seguidos por");
-		return userRelationshipRepository.findByFollowed(followed);
+		return userRelationshipRepository.findFollowerByFollowed(followed);
+	}
+	
+	public List<User> findFollowedByFollower(User user) {
+		LOGGER.info("Buscando seguidos");
+		return userRelationshipRepository.findFollowedByFollower(user);
 	}
 }

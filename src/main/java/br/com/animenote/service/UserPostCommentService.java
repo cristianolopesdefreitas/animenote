@@ -16,6 +16,11 @@ public class UserPostCommentService {
 	UserPostCommentRepository userPostCommentRepository;
 
 	private static final Logger LOGGER = Logger.getLogger(UserPostService.class);
+	
+	public UserPostComment findById(Long id) {
+		LOGGER.info("Buscando comentário.");
+		return userPostCommentRepository.findOne(id);
+	}
 
 	public UserPostComment savePostComment(UserPostComment userPostComment) {
 		LOGGER.info("Salvando postagem.");

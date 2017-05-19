@@ -39,6 +39,7 @@
 									<div class="panel panel-default">
 										<div class="panel-heading">
 											<strong th:text="${comment.user.name}"></strong> comentou em <strong th:text="${#dates.format(comment.commentDate, 'HH:mm - dd/MM/yyyy')}"></strong>
+											<a th:href="${'/denunciar-comentario/' + comment.id}" class="btn btn-warning btn-xs pull-right" th:if="${comment.user.id != userLoggedId}">Denúnciar</a>
 										</div>
 										<div class="panel-body">
 											<p th:text="${comment.comment}"></p>

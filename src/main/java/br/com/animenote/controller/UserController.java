@@ -2,6 +2,7 @@ package br.com.animenote.controller;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.List;
 
 import javax.validation.Valid;
 
@@ -18,7 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.animenote.constants.Status;
 import br.com.animenote.model.User;
+import br.com.animenote.model.UserPost;
 import br.com.animenote.service.AnimeService;
 import br.com.animenote.service.UserPostService;
 import br.com.animenote.service.UserRelationshipService;
@@ -47,6 +50,9 @@ public class UserController {
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
 		User user = userService.findByUsername(userDetails.getUsername());
+		Long userLoggedId = user.getId();
+		
+		model.addAttribute("userLoggedId", userLoggedId);
 
 		model.addAttribute("user", user);
 
@@ -59,7 +65,13 @@ public class UserController {
 
 		model.addAttribute("avatar", avatar);
 		
-		model.addAttribute("posts", userPostService.findAssociatedPosts());
+		List<User> users = userRelationshipService.findFollowedByFollower(user);
+		
+		users.add(user);
+		
+		List<UserPost> posts = userPostService.findByUserInAndStatus(users, Status.A);
+		
+		model.addAttribute("posts", posts);
 		model.addAttribute("registeredAnimesQuantity", animeService.findByUser(user).size());
 		model.addAttribute("followerQuantity", userRelationshipService.findByFollower(user).size());
 		model.addAttribute("followedQuantity", userRelationshipService.findByFollowed(user).size());
@@ -172,5 +184,25 @@ public class UserController {
 		model.addAttribute("success", "Sua senha foi alterada com sucesso!");
 
 		return this.changePasswordScreen(model);
+	}
+	
+	@GetMapping("/meu-perfil")
+	public String viewProfile(Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		User user = userService.findByUsername(userDetails.getUsername());
+		
+		String avatar = null;
+		
+		if (user.getAvatar() != null) {
+			avatar = "data:" + user.getAvatarType() + ";base64,"
+					+ new String(Base64.getEncoder().encode(user.getAvatar()));
+		}
+		
+		model.addAttribute("user", user);
+		model.addAttribute("avatar", avatar);
+		
+		return "profile";
 	}
 }

@@ -9,8 +9,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
-@Entity(name = "tb_user_relationship")
+@Table(name = "tb_user_relationship")
+@Entity
 public class UserRelationship implements Serializable {
 	private static final long serialVersionUID = 1L;
 	

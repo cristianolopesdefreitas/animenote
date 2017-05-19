@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-<head th:replace="fragments/fragments :: head (title = 'Timeline')"></head>
+<head th:replace="fragments/fragments :: head (title = 'Meu Perfil')"></head>
 <body>
     <header th:replace="fragments/fragments :: internalHeader"></header>
 
@@ -15,18 +15,11 @@
                         </a>
                         <h2 th:text="${user.name}"></h2>
                     </div>
-                    <div class="list-group" th:if="${user.id == userLoggedId}">
+                    <div class="list-group">
                         <a href="/postagem" class="list-group-item list-group-item-success text-center">
                             <i class="glyphicon glyphicon-pencil"></i> Escrever Postagem
                         </a>
-                    </div>
-                    <div class="list-group" th:if="${user.id != userLoggedId}">
-                        <a href="" class="list-group-item list-group-item-success text-center">
-                            <i class="glyphicon glyphicon-ok-sign"></i> Seguir
-                        </a>
-                        <a href="" class="list-group-item list-group-item-danger text-center">
-                            <i class="glyphicon glyphicon-remove-sign"></i> Deixar de Seguir
-                        </a>
+                        <a href="" class="list-group-item list-group-item-success text-center">Seguir</a>
                     </div>
                     <div class="list-group">
                         <a href="#" class="list-group-item">
@@ -44,28 +37,14 @@
                     <div class="panel panel-default" th:if="${posts != null}" th:each="post : ${posts}">
                         <div class="panel-heading">
                             <strong th:text="${post.user.name}"></strong> postou em <strong th:text="${#dates.format(post.postDate, 'HH:mm - dd/MM/yyyy')}"></strong>
-                            <div class="btn-group pull-right">
-                                <a th:href="${'/editar-postagem/' + post.id}" class="btn btn-success btn-xs" th:if="${userLoggedId == post.user.id}">
-                                    <i class="glyphicon glyphicon-edit"></i> Editar
-                                </a>
-                                <a th:href="${'/excluir-postagem/' + post.id}" class="btn btn-danger btn-xs" th:if="${userLoggedId == post.user.id}">
-                                    <i class="glyphicon glyphicon-trash"></i> Deletar
-                                </a>
-                                <a th:href="${'/denunciar-postagem/' + post.id}" class="btn btn-warning btn-xs" th:if="${userLoggedId != post.user.id}">
-                                    <i class="glyphicon glyphicon-bullhorn"></i>
-                                    Denunciar
-                                </a>
-                            </div>
                         </div>
                         <div class="panel-body" th:utext="${post.post}"></div>
                         <div class="panel-footer">
-                            <div class="btn-group">
-                                <a href="" class="btn btn-success btn-xs">
-                                    <i class="glyphicon glyphicon-thumbs-up"></i> Curtir
-                                </a>
-                                <a th:href="${'/visualizar-postagem/' + post.id}" class="btn btn-success btn-xs">
-                                    <i class="glyphicon glyphicon-comment"></i> Comentar
-                                </a>
+                            <div class="btn-group" role="group" aria-label="...">
+                                <a th:href="${'/visualizar-postagem/' + post.id}" class="btn btn-default">Comentar</a>
+                                <a th:href="${'/denunciar-postagem/' + post.id}" class="btn btn-warning" th:if="${user.id != post.user.id}">Denunciar</a>
+                                <a th:href="${'/editar-postagem/' + post.id}" class="btn btn-default" th:if="${user.id == post.user.id}">Editar</a>
+                                <a th:href="${'/excluir-postagem/' + post.id}" class="btn btn-danger" th:if="${user.id == post.user.id}">Deletar</a>
                             </div>
                         </div>
                     </div>

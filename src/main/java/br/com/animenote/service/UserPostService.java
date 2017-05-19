@@ -6,6 +6,8 @@ import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.animenote.constants.Status;
+import br.com.animenote.model.User;
 import br.com.animenote.model.UserPost;
 import br.com.animenote.repository.UserPostRepository;
 
@@ -39,5 +41,10 @@ public class UserPostService {
 	public int disablePost(Long id) {
 		LOGGER.info("Desabilitanto postagem");
 		return userPostRepository.disablePost(id);
+	}
+	
+	public List<UserPost> findByUserInAndStatus(List<User> users, Status status) {
+		LOGGER.info("Buscando postagens da timeline");
+		return userPostRepository.findByUserInAndStatus(users, status);
 	}
 }

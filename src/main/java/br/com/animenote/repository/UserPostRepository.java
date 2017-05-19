@@ -17,6 +17,8 @@ import br.com.animenote.model.UserPost;
 @Repository
 public interface UserPostRepository extends JpaRepository<UserPost, Long> {
 	
+	List<UserPost> findByUserInAndStatus(List<User> users, Status status);
+	
 	List<UserPost> findByStatusAndUser(Status status, User user);
 	
 	@Query(value = "SELECT p FROM UserPost p WHERE p.status = 'A'")

@@ -20,9 +20,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.animenote.model.Anime;
 import br.com.animenote.model.User;
+import br.com.animenote.model.UserInteractionAnime;
 import br.com.animenote.service.AnimeCategoryService;
 import br.com.animenote.service.AnimeCreatorService;
 import br.com.animenote.service.AnimeService;
+import br.com.animenote.service.UserInteractionAnimeService;
 import br.com.animenote.service.UserService;
 
 @Controller
@@ -38,6 +40,9 @@ public class AnimeController {
 
 	@Autowired
 	private AnimeCreatorService animeCreatorService;
+	
+	@Autowired
+	private UserInteractionAnimeService userInteractionAnimeService;
 
 	@GetMapping("/animes")
 	public String findAll(Model model) {
@@ -58,6 +63,19 @@ public class AnimeController {
 			model.addAttribute("anime", anime);
 		} else {
 			model.addAttribute("message", "Anime não encontrado.");
+		}
+		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		User user = userService.findByUsername(userDetails.getUsername());
+		
+		UserInteractionAnime interaction = userInteractionAnimeService.findByUserAndAnime(user, anime);
+		
+		if (interaction !=  null) {
+			model.addAttribute("userInteraction", interaction.getAnimeInteractions());
+		} else {
+			model.addAttribute("userInteraction", "");
 		}
 
 		return "anime";

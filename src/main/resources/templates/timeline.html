@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-3">
                     <div class="text-center">
-                        <a href="/meu-perfil">
+                        <a th:href="${'/usuario/' + user.username}">
                             <img th:if="${avatar}" th:src="${avatar}" th:alt="${user.name}" class="img-circle timeline-avatar" />
                             <img th:unless="${avatar}" src="/images/avatars/avatar-01.jpg" th:alt="${user.name}" class="img-circle timeline-avatar" />
                         </a>
@@ -21,10 +21,10 @@
                         </a>
                     </div>
                     <div class="list-group" th:if="${user.id != userLoggedId}">
-                        <a href="" class="list-group-item list-group-item-success text-center">
+                        <a th:href="${'/usuario/' + user.username + '/follow'}" class="list-group-item list-group-item-success text-center" th:if="${!follow}">
                             <i class="glyphicon glyphicon-ok-sign"></i> Seguir
                         </a>
-                        <a href="" class="list-group-item list-group-item-danger text-center">
+                        <a th:href="${'/usuario/' + user.username + '/unfollow'}" class="list-group-item list-group-item-danger text-center" th:if="${follow}">
                             <i class="glyphicon glyphicon-remove-sign"></i> Deixar de Seguir
                         </a>
                     </div>

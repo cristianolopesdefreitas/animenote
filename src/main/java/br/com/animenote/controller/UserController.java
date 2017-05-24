@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.animenote.constants.Status;
 import br.com.animenote.model.User;
 import br.com.animenote.model.UserPost;
+import br.com.animenote.model.UserRelationship;
 import br.com.animenote.service.AnimeService;
 import br.com.animenote.service.UserPostService;
 import br.com.animenote.service.UserRelationshipService;
@@ -192,17 +194,117 @@ public class UserController {
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
 		User user = userService.findByUsername(userDetails.getUsername());
+		Long userLoggedId = user.getId();
 		
+		model.addAttribute("userLoggedId", userLoggedId);
+
+		model.addAttribute("user", user);
+
 		String avatar = null;
-		
+
 		if (user.getAvatar() != null) {
 			avatar = "data:" + user.getAvatarType() + ";base64,"
 					+ new String(Base64.getEncoder().encode(user.getAvatar()));
 		}
-		
-		model.addAttribute("user", user);
+
 		model.addAttribute("avatar", avatar);
 		
-		return "profile";
+		List<User> users = userRelationshipService.findFollowedByFollower(user);
+		
+		users.add(user);
+		
+		List<UserPost> posts = userPostService.findByUserInAndStatus(users, Status.A);
+		
+		model.addAttribute("posts", posts);
+		model.addAttribute("registeredAnimesQuantity", animeService.findByUser(user).size());
+		model.addAttribute("followerQuantity", userRelationshipService.findByFollower(user).size());
+		model.addAttribute("followedQuantity", userRelationshipService.findByFollowed(user).size());
+
+		return "timeline";
+	}
+	
+	@GetMapping("/usuario/{username}")
+	public String viewUser(@PathVariable String username, Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		User userLogged = userService.findByUsername(userDetails.getUsername());
+		Long userLoggedId = userLogged.getId();
+		
+		model.addAttribute("userLoggedId", userLoggedId);
+		
+		User user = userService.findByUsername(username);
+		
+		if ( user == null ) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+
+		model.addAttribute("user", user);
+
+		String avatar = null;
+
+		if (user.getAvatar() != null) {
+			avatar = "data:" + user.getAvatarType() + ";base64,"
+					+ new String(Base64.getEncoder().encode(user.getAvatar()));
+		}
+
+		model.addAttribute("avatar", avatar);
+		
+		List<UserPost> posts = userPostService.findByUserAndStatus(user, Status.A);
+		
+		UserRelationship relation = userRelationshipService.findByFollowerAndFollowedAndStatus(userLogged, user, Status.A);
+		
+		if (relation == null) {
+			model.addAttribute("follow", false);
+		} else {
+			model.addAttribute("follow", true);
+		}
+		
+		model.addAttribute("posts", posts);
+		model.addAttribute("registeredAnimesQuantity", animeService.findByUser(user).size());
+		model.addAttribute("followerQuantity", userRelationshipService.findByFollower(user).size());
+		model.addAttribute("followedQuantity", userRelationshipService.findByFollowed(user).size());
+		
+		return "timeline";
+	}
+	
+	@GetMapping("/usuario/{username}/{action}")
+	public String followOrUnfollow(@PathVariable String username, @PathVariable String action, Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		User userLogged = userService.findByUsername(userDetails.getUsername());
+		Long userLoggedId = userLogged.getId();
+		
+		model.addAttribute("userLoggedId", userLoggedId);
+		
+		User user = userService.findByUsername(username);
+		
+		if ( user == null ) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+		
+		UserRelationship relation = userRelationshipService.findByFollowerAndFollowed(userLogged, user);
+		
+		if (action.equals("follow")) {
+			if ( relation == null ) {
+				relation = new UserRelationship();
+				
+				relation.setFollower(userLogged);
+				relation.setFollowed(user);
+				
+				userRelationshipService.saveAndFlush(relation);
+			} else {
+				userRelationshipService.changeStatus(relation.getId(), Status.A);
+			}
+		} else if (action.equals("unfollow")) {
+			userRelationshipService.changeStatus(relation.getId(), Status.I);
+		}
+		
+		return "redirect:/usuario/" + username;
 	}
 }

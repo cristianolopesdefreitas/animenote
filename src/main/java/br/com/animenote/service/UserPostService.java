@@ -47,4 +47,9 @@ public class UserPostService {
 		LOGGER.info("Buscando postagens da timeline");
 		return userPostRepository.findByUserInAndStatus(users, status);
 	}
+	
+	public List<UserPost> findByUserAndStatus(User user, Status status) {
+		LOGGER.info("Buscando postagens do usuário");
+		return userPostRepository.findByUserAndStatus(user, status);
+	}
 }

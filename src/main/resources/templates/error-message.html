@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Mensagem de Erro')"></head>
+<body>
+	<header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+                    <div class="alert alert-danger text-center" th:text="${errorMessage}"></div>
+					<a th:href="${'/'}" class="btn btn-block btn-primary">Voltar para timeline</a>
+                </div>
+            </div>
+        </div>
+    </main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

@@ -19,7 +19,7 @@ public interface UserPostRepository extends JpaRepository<UserPost, Long> {
 	
 	List<UserPost> findByUserInAndStatus(List<User> users, Status status);
 	
-	List<UserPost> findByStatusAndUser(Status status, User user);
+	List<UserPost> findByUserAndStatus(User user, Status status);
 	
 	@Query(value = "SELECT p FROM UserPost p WHERE p.status = 'A'")
 	List<UserPost> findAssociatedPosts();

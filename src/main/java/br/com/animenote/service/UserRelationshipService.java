@@ -57,4 +57,14 @@ public class UserRelationshipService {
 		LOGGER.info("Alterando o status de um relacionamento");
 		return userRelationshipRepository.changeStatus(id, status); 
 	}
+	
+	public List<User> findByFollowerAndStatus(User follower, Status status) {
+		LOGGER.info("Buscando seguidores");
+		return userRelationshipRepository.findByFollowerAndStatus(follower, status);
+	}
+	
+	public List<User> findByFollowedAndStatus(User followed, Status status) {
+		LOGGER.info("Buscando seguidos");
+		return userRelationshipRepository.findByFollowedAndStatus(followed, status);
+	}
 }

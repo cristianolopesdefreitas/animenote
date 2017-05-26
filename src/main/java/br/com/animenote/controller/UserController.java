@@ -21,10 +21,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.animenote.constants.Status;
+import br.com.animenote.model.Anime;
 import br.com.animenote.model.User;
+import br.com.animenote.model.UserInteractionAnime;
 import br.com.animenote.model.UserPost;
 import br.com.animenote.model.UserRelationship;
 import br.com.animenote.service.AnimeService;
+import br.com.animenote.service.UserInteractionAnimeService;
 import br.com.animenote.service.UserPostService;
 import br.com.animenote.service.UserRelationshipService;
 import br.com.animenote.service.UserService;
@@ -42,6 +45,9 @@ public class UserController {
 	
 	@Autowired
 	UserRelationshipService userRelationshipService;
+	
+	@Autowired
+	UserInteractionAnimeService userInteractionAnimeService;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -306,5 +312,73 @@ public class UserController {
 		}
 		
 		return "redirect:/usuario/" + username;
+	}
+	
+	@GetMapping("/usuario/{username}/seguidos")
+	public String viewFollowed(@PathVariable String username, Model model) {
+		User user = userService.findByUsername(username);
+		
+		if ( user == null ) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+		
+		List<User> followed = userRelationshipService.findByFollowerAndStatus(user, Status.A);
+		
+		model.addAttribute("followed", followed);
+		
+		return "followed";
+	}
+	
+	@GetMapping("/usuario/{username}/seguidores")
+	public String viewFollower(@PathVariable String username, Model model) {
+		User user = userService.findByUsername(username);
+		
+		if ( user == null ) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+		
+		List<User> followers = userRelationshipService.findByFollowedAndStatus(user, Status.A);
+		
+		model.addAttribute("followers", followers);
+		
+		return "followers";
+	}
+	
+	@GetMapping("/usuario/{username}/cadastros")
+	public String viewRegisteredAnimes(@PathVariable String username, Model model) {
+		User user = userService.findByUsername(username);
+		
+		if ( user == null ) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+		
+		List<Anime> animes = animeService.findByUser(user);
+		
+		model.addAttribute("animes", animes);
+		
+		return "registered-animes";
+	}
+	
+	@GetMapping("/usuario/{username}/interagidos")
+	public String viewInteractedAnimes(@PathVariable String username, Model model) {
+		User user = userService.findByUsername(username);
+		
+		if ( user == null ) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+		
+		List<UserInteractionAnime> animes = userInteractionAnimeService.findByUser(user);
+		
+		model.addAttribute("animes", animes);
+		
+		return "registered-animes";
 	}
 }

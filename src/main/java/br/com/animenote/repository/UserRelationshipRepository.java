@@ -17,7 +17,7 @@ import br.com.animenote.model.UserRelationship;
 @Repository
 public interface UserRelationshipRepository extends JpaRepository<UserRelationship, Long> {
 	
-	@Query("SELECT u.followed FROM UserRelationship u WHERE u.follower = ?1")
+	@Query("SELECT u.followed FROM UserRelationship u WHERE u.follower = ?1 AND u.status = 'A'")
 	List<User> findFollowedByFollower(User follower);
 	
 	@Query("SELECT u.follower FROM UserRelationship u WHERE u.followed = ?1")
@@ -34,4 +34,8 @@ public interface UserRelationshipRepository extends JpaRepository<UserRelationsh
 	@Transactional
 	@Query("UPDATE UserRelationship u SET u.status = :status WHERE u.id = :id")
 	int changeStatus(@Param("id") Long id, @Param("status") Status status);
+	
+	List<User> findByFollowerAndStatus(User follower, Status status);
+	
+	List<User> findByFollowedAndStatus(User followed, Status status);
 }

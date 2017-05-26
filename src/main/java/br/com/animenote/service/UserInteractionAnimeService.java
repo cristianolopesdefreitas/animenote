@@ -1,5 +1,7 @@
 package br.com.animenote.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,5 +17,9 @@ public class UserInteractionAnimeService {
 	
 	public UserInteractionAnime findByUserAndAnime(User user, Anime anime) {
 		return userInteractionAnimeRepository.findByUserAndAnime(user, anime);
+	}
+	
+	public List<UserInteractionAnime> findByUser(User user) {
+		return userInteractionAnimeRepository.findByUser(user);
 	}
 }

@@ -31,7 +31,7 @@ public class UserInteractionAnime implements Serializable {
 	private User user;
 	
 	@NotBlank
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "anime_id", nullable = false)
 	private Anime anime;
 	

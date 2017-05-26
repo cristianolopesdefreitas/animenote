@@ -29,21 +29,26 @@
                         </a>
                     </div>
                     <div class="list-group">
-                        <a href="#" class="list-group-item">
+                        <a th:href="${'/usuario/' + user.username + '/seguidos'}" class="list-group-item">
                             <span class="badge" th:text="${followerQuantity}"></span>Seguindo
                         </a>
-                        <a href="#" class="list-group-item">
+                        <a th:href="${'/usuario/' + user.username + '/seguidores'}" class="list-group-item">
                             <span class="badge" th:text="${followedQuantity}"></span>Seguidores
                         </a>
-                        <a href="#" class="list-group-item">
-                            <span class="badge" th:text="${registeredAnimesQuantity}"></span>Animes
+                        <a th:href="${'/usuario/' + user.username + '/cadastros'}" class="list-group-item">
+                            <span class="badge" th:text="${registeredAnimesQuantity}"></span>Animes Cadastrados
+                        </a>
+                        <a th:href="${'/usuario/' + user.username + '/interagidos'}" class="list-group-item">
+                            <span class="badge" th:text="${interactedAnimes}"></span>Animes Interagidos
                         </a>
                     </div>
                 </div>
                 <div class="col-xs-12 col-sm-9">
                     <div class="panel panel-default" th:if="${posts != null}" th:each="post : ${posts}">
                         <div class="panel-heading">
-                            <strong th:text="${post.user.name}"></strong> postou em <strong th:text="${#dates.format(post.postDate, 'HH:mm - dd/MM/yyyy')}"></strong>
+                            <strong>
+                                <a th:href="${'/usuario/' + user.username}" th:text="${post.user.name}"></a>
+                            </strong> postou em <strong th:text="${#dates.format(post.postDate, 'HH:mm - dd/MM/yyyy')}"></strong>
                             <div class="btn-group pull-right">
                                 <a th:href="${'/editar-postagem/' + post.id}" class="btn btn-success btn-xs" th:if="${userLoggedId == post.user.id}">
                                     <i class="glyphicon glyphicon-edit"></i> Editar

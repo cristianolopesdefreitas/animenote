@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Seguidores')"></head>
+<body>
+    <header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-warning text-center" th:if="${size == 0}">Nenhum seguidor encontrado.</div>
+                </div>
+                <div class="col-xs-12 col-sm-3" th:if="${followers != null}" th:each="user : ${followers}">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <strong class="center-block text-center">
+                                <a th:href="${'/usuario/' + user.follower.username}" th:text="${user.follower.name}"></a>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

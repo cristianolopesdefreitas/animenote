@@ -12,9 +12,9 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-3 text-center">
 							<img th:if="${avatar}" th:src="${avatar}"
-								th:alt="${userPost.user.name}" class="img-circle" /> <img
+								th:alt="${userPost.user.name}" class="img-circle img-responsive center-block" /> <img
 								th:unless="${avatar}" src="/images/avatars/avatar-01.jpg"
-								th:alt="${userPost.user.name}" class="img-circle" />
+								th:alt="${userPost.user.name}" class="img-circle img-responsive center-block" />
 							<h3 th:text="${userPost.user.name}"></h3>
 							<strong>Data da Postagem: <span th:text="${#dates.format(userPost.postDate, 'HH:mm - dd/MM/yyyy')}"></span></strong>
 						</div>
@@ -38,7 +38,9 @@
 								<li>
 									<div class="panel panel-default">
 										<div class="panel-heading">
-											<strong th:text="${comment.user.name}"></strong> comentou em <strong th:text="${#dates.format(comment.commentDate, 'HH:mm - dd/MM/yyyy')}"></strong>
+											<strong>
+												<a th:href="${'/usuario/' + comment.user.username}" th:text="${comment.user.name}"></a>
+											</strong> comentou em <strong th:text="${#dates.format(comment.commentDate, 'HH:mm - dd/MM/yyyy')}"></strong>
 											<a th:href="${'/denunciar-comentario/' + comment.id}" class="btn btn-warning btn-xs pull-right" th:if="${comment.user.id != userLoggedId}">Denúnciar</a>
 										</div>
 										<div class="panel-body">

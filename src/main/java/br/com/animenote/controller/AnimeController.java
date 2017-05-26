@@ -40,7 +40,7 @@ public class AnimeController {
 
 	@Autowired
 	private AnimeCreatorService animeCreatorService;
-	
+
 	@Autowired
 	private UserInteractionAnimeService userInteractionAnimeService;
 
@@ -64,15 +64,15 @@ public class AnimeController {
 		} else {
 			model.addAttribute("message", "Anime não encontrado.");
 		}
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
 		User user = userService.findByUsername(userDetails.getUsername());
-		
+
 		UserInteractionAnime interaction = userInteractionAnimeService.findByUserAndAnime(user, anime);
-		
-		if (interaction !=  null) {
+
+		if (interaction != null) {
 			model.addAttribute("userInteraction", interaction.getAnimeInteractions());
 		} else {
 			model.addAttribute("userInteraction", "");
@@ -93,6 +93,7 @@ public class AnimeController {
 	@PostMapping("/cadastrar-anime")
 	public String animeRegistration(@Valid Anime anime, BindingResult result,
 			@RequestParam("animeImage") MultipartFile animeImage, Model model) {
+		
 		if (animeImage.isEmpty() || animeImage.getSize() == 0) {
 			model.addAttribute("error", "Por favor insira uma imagem.");
 			return this.animeRegistrationScreen(anime, model);
@@ -110,6 +111,16 @@ public class AnimeController {
 			return this.animeRegistrationScreen(anime, model);
 		}
 
+		try {
+			anime.setImage(animeImage.getBytes());
+			anime.setImageType(animeImage.getContentType());
+
+			animeService.save(anime);
+		} catch (IOException e) {
+			model.addAttribute("error", "Ocorreu um erro com o upload da imagem, tente novamente.");
+			return this.animeRegistrationScreen(anime, model);
+		}
+
 		if (result.hasErrors()) {
 			return this.animeRegistrationScreen(anime, model);
 		}
@@ -120,16 +131,6 @@ public class AnimeController {
 		User user = userService.findByUsername(userDetails.getUsername());
 
 		anime.setUser(user);
-
-		try {
-			anime.setImage(animeImage.getBytes());
-			anime.setImageType(animeImage.getContentType());
-
-			animeService.save(anime);
-		} catch (IOException e) {
-			model.addAttribute("error", "Ocorreu um erro com o upload da imagem, tente novamente.");
-			return this.animeRegistrationScreen(anime, model);
-		}
 
 		animeService.save(anime);
 
@@ -164,9 +165,11 @@ public class AnimeController {
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
 		User user = userService.findByUsername(userDetails.getUsername());
-		
+
 		if (savedAnime != null && savedAnime.getUser().getId() == user.getId()) {
 			anime.setUser(user);
+			anime.setImage(savedAnime.getImage());
+			anime.setImageType(savedAnime.getImageType());
 			animeService.save(anime);
 			model.addAttribute("success", "O anime foi editado com sucesso!");
 		} else {
@@ -175,29 +178,30 @@ public class AnimeController {
 
 		return "anime-registration";
 	}
-	
+
 	@GetMapping("/alterar-imagem-anime/{id}")
 	public String changeAnimeImageScreen(@PathVariable Long id, Model model) {
 		Anime anime = animeService.findById(id);
-		
+
 		if (anime != null) {
 			model.addAttribute("anime", anime);
 		} else {
 			model.addAttribute("error", "Anime não encontrado.");
 		}
-		
+
 		return "change-anime-image";
 	}
-	
+
 	@PostMapping("/alterar-imagem-anime/{id}")
-	public String changeAnimeImage(@PathVariable Long id, @RequestParam("animeImage") MultipartFile animeImage, Model model) {
+	public String changeAnimeImage(@PathVariable Long id, @RequestParam("animeImage") MultipartFile animeImage,
+			Model model) {
 		Anime savedAnime = animeService.findById(id);
-		
+
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
 		User user = userService.findByUsername(userDetails.getUsername());
-		
+
 		if (savedAnime != null && savedAnime.getUser().getId() == user.getId()) {
 			if (animeImage.isEmpty() || animeImage.getSize() == 0) {
 				model.addAttribute("error", "Por favor insira uma imagem.");
@@ -215,7 +219,7 @@ public class AnimeController {
 				model.addAttribute("error", "O tamanho da imagem não pode passar de 1MB.");
 				return this.changeAnimeImageScreen(id, model);
 			}
-			
+
 			try {
 				savedAnime.setImage(animeImage.getBytes());
 				savedAnime.setImageType(animeImage.getContentType());
@@ -226,7 +230,7 @@ public class AnimeController {
 				return this.changeAnimeImageScreen(id, model);
 			}
 		}
-		
+
 		return this.changeAnimeImageScreen(id, model);
 	}
 

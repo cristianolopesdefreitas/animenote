@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Seguidos')"></head>
+<body>
+    <header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-warning text-center" th:if="${size == 0}">Nenhum seguido encontrado.</div>
+                </div>
+                <div class="col-xs-12 col-sm-3" th:if="${followed != null}" th:each="user : ${followed}">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <strong class="center-block text-center">
+                                <a th:href="${'/usuario/' + user.followed.username}" th:text="${user.followed.name}"></a>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

@@ -47,7 +47,7 @@
                     <div class="panel panel-default" th:if="${posts != null}" th:each="post : ${posts}">
                         <div class="panel-heading">
                             <strong>
-                                <a th:href="${'/usuario/' + user.username}" th:text="${post.user.name}"></a>
+                                <a th:href="${'/usuario/' + post.user.username}" th:text="${post.user.name}"></a>
                             </strong> postou em <strong th:text="${#dates.format(post.postDate, 'HH:mm - dd/MM/yyyy')}"></strong>
                             <div class="btn-group pull-right">
                                 <a th:href="${'/editar-postagem/' + post.id}" class="btn btn-success btn-xs" th:if="${userLoggedId == post.user.id}">

@@ -58,12 +58,12 @@ public class UserRelationshipService {
 		return userRelationshipRepository.changeStatus(id, status); 
 	}
 	
-	public List<User> findByFollowerAndStatus(User follower, Status status) {
+	public List<UserRelationship> findByFollowerAndStatus(User follower, Status status) {
 		LOGGER.info("Buscando seguidores");
 		return userRelationshipRepository.findByFollowerAndStatus(follower, status);
 	}
 	
-	public List<User> findByFollowedAndStatus(User followed, Status status) {
+	public List<UserRelationship> findByFollowedAndStatus(User followed, Status status) {
 		LOGGER.info("Buscando seguidos");
 		return userRelationshipRepository.findByFollowedAndStatus(followed, status);
 	}

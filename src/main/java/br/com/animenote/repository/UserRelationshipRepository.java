@@ -35,7 +35,7 @@ public interface UserRelationshipRepository extends JpaRepository<UserRelationsh
 	@Query("UPDATE UserRelationship u SET u.status = :status WHERE u.id = :id")
 	int changeStatus(@Param("id") Long id, @Param("status") Status status);
 	
-	List<User> findByFollowerAndStatus(User follower, Status status);
+	List<UserRelationship> findByFollowerAndStatus(User follower, Status status);
 	
-	List<User> findByFollowedAndStatus(User followed, Status status);
+	List<UserRelationship> findByFollowedAndStatus(User followed, Status status);
 }

@@ -7,6 +7,9 @@
 	<main>
 		<div class="container">
 			<div class="row">
+				<div class="col-xs-12">
+					<div class="alert alert-warning text-center" th:if="${size == 0}">Nenhum anime encontrado.</div>
+				</div>
 				<div class="col-xs-12 col-sm-3" th:if="${animes != null}" th:each="anime : ${animes}">
 					<div class="panel panel-default">
 						<div class="panel-heading">

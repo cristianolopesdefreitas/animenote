@@ -83,6 +83,7 @@ public class UserController {
 		model.addAttribute("registeredAnimesQuantity", animeService.findByUser(user).size());
 		model.addAttribute("followerQuantity", userRelationshipService.findByFollower(user).size());
 		model.addAttribute("followedQuantity", userRelationshipService.findByFollowed(user).size());
+		model.addAttribute("interactedAnimes", userInteractionAnimeService.findByUser(user).size());
 
 		return "timeline";
 	}
@@ -324,9 +325,11 @@ public class UserController {
 			return "error-message";
 		}
 		
-		List<User> followed = userRelationshipService.findByFollowerAndStatus(user, Status.A);
+		List<UserRelationship> followed = userRelationshipService.findByFollowerAndStatus(user, Status.A);
 		
 		model.addAttribute("followed", followed);
+		
+		model.addAttribute("size", followed.size());
 		
 		return "followed";
 	}
@@ -341,9 +344,11 @@ public class UserController {
 			return "error-message";
 		}
 		
-		List<User> followers = userRelationshipService.findByFollowedAndStatus(user, Status.A);
+		List<UserRelationship> followers = userRelationshipService.findByFollowedAndStatus(user, Status.A);
 		
 		model.addAttribute("followers", followers);
+		
+		model.addAttribute("size", followers.size());
 		
 		return "followers";
 	}
@@ -358,9 +363,18 @@ public class UserController {
 			return "error-message";
 		}
 		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		User userLogged = userService.findByUsername(userDetails.getUsername());
+		
 		List<Anime> animes = animeService.findByUser(user);
 		
 		model.addAttribute("animes", animes);
+		
+		model.addAttribute("size", animes.size());
+		
+		model.addAttribute("user", userLogged);
 		
 		return "registered-animes";
 	}
@@ -375,9 +389,18 @@ public class UserController {
 			return "error-message";
 		}
 		
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		User userLogged = userService.findByUsername(userDetails.getUsername());
+		
 		List<UserInteractionAnime> animes = userInteractionAnimeService.findByUser(user);
 		
 		model.addAttribute("animes", animes);
+		
+		model.addAttribute("size", animes.size());
+		
+		model.addAttribute("user", userLogged);
 		
 		return "registered-animes";
 	}

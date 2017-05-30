@@ -17,6 +17,24 @@
 								th:alt="${userPost.user.name}" class="img-circle img-responsive center-block" />
 							<h3 th:text="${userPost.user.name}"></h3>
 							<strong>Data da Postagem: <span th:text="${#dates.format(userPost.postDate, 'HH:mm - dd/MM/yyyy')}"></span></strong>
+
+							<hr />
+
+							<strong class="text-center center-block">Quantidade de curtidas</strong>
+							<strong class="text-center center-block" th:text="${likeInteractions}"></strong>
+
+							<a th:href="${'/interagir-com-postagem/' + userPost.id + '/curtir'}" th:if="${userPost.user.id != userLoggedId}" class="btn btn-success btn-block">
+								<i class="glyphicon glyphicon-thumbs-up"></i> Curtir
+							</a>
+
+							<hr/>
+
+							<strong class="text-center center-block">Quantidade de descurtidas</strong>
+							<strong class="text-center center-block" th:text="${unlikeInteractions}"></strong>
+
+							<a th:href="${'/interagir-com-postagem/' + userPost.id + '/descurtir'}" th:if="${userPost.user.id != userLoggedId}" class="btn btn-danger btn-block">
+								<i class="glyphicon glyphicon-thumbs-down"></i> Descurtir
+							</a>
 						</div>
 						<div class="col-xs-12 col-sm-9">
 							<div th:utext="${userPost.post}"></div>

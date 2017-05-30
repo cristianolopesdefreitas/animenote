@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Animes items')"></head>
+<body>
+	<header th:replace="fragments/fragments :: internalHeader"></header>
+
+	<main>
+		<div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+					<div class="alert alert-warning text-center" th:if="${size == 0}">Nenhum anime encontrado.</div>
+				</div>
+				<div class="col-xs-12 col-sm-3" th:if="${item != null}" th:each="item : ${interacted}">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 th:text="${item.anime.name}"></h4>
+						</div>
+						<div class="panel-body">
+							<div class="col-xs-12">
+								<dl>
+									<dt>Cadastrador:</dt>
+									<dd>
+										<a th:href="${'/usuario/' + item.anime.user.username}" th:text="${item.anime.user.name}"></a>
+									</dd>
+									<dt>Criador:</dt>
+									<dd th:text="${item.anime.animeCreator.name}"></dd>
+									<dt>Ano de Lançamento:</dt>
+									<dd th:text="${#dates.format(item.anime.releaseYear, 'yyyy')}"></dd>
+									<dt>Número de Episódios:</dt>
+									<dd th:if="${item.anime.episodeNumbers}" th:text="${item.anime.episodeNumbers}"></dd>
+									<dd th:unless="${item.anime.episodeNumbers}">Em lançamento</dd>
+									<dt>Categoria(s):</dt>
+									<dd>
+										<span class="badge" th:each="category : ${item.anime.animeCategories}" th:text="${category.category}"></span>
+									</dd>
+                                    <dt>Tipo de Interação:</dt>
+                                    <dd th:switch="${#strings.toString(item.animeInteractions)}"> 
+                                        <span th:case="'JA_VI'">Já Vi</span>
+                                        <span th:case="'ESTOU_VENDO'">Estou Vendo</span>
+                                        <span th:case="'QUERO_VER'">Quero Ver</span>
+                                    </dd>
+								</dl>
+							</div>
+						</div>
+						<div class="panel-footer">
+							<div class="btn-group">
+								<a th:href="${'/anime/' + item.anime.id}" class="btn btn-default btn-success">Visualizar</a>
+								<a th:href="${'/editar-anime/' + item.anime.id}" class="btn btn-default btn-primary" th:if="${user.id == item.anime.user.id}">Editar</a>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

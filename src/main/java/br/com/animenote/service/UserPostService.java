@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import br.com.animenote.constants.Status;
@@ -43,9 +44,9 @@ public class UserPostService {
 		return userPostRepository.disablePost(id);
 	}
 	
-	public List<UserPost> findByUserInAndStatus(List<User> users, Status status) {
+	public List<UserPost> findByUserInAndStatusOrderByIdDesc(List<User> users, Status status, Pageable pageable) {
 		LOGGER.info("Buscando postagens da timeline");
-		return userPostRepository.findByUserInAndStatus(users, status);
+		return userPostRepository.findByUserInAndStatusOrderByIdDesc(users, status, pageable);
 	}
 	
 	public List<UserPost> findByUserAndStatus(User user, Status status) {

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.animenote.constants.AnimeInteractions;
+import br.com.animenote.constants.Status;
 import br.com.animenote.model.Anime;
 import br.com.animenote.model.User;
 import br.com.animenote.model.UserInteractionAnime;
@@ -70,7 +72,7 @@ public class AnimeController {
 
 		User user = userService.findByUsername(userDetails.getUsername());
 
-		UserInteractionAnime interaction = userInteractionAnimeService.findByUserAndAnime(user, anime);
+		UserInteractionAnime interaction = userInteractionAnimeService.findByUserAndAnimeAndStatus(user, anime, Status.A);
 
 		if (interaction != null) {
 			model.addAttribute("userInteraction", interaction.getAnimeInteractions());
@@ -114,8 +116,6 @@ public class AnimeController {
 		try {
 			anime.setImage(animeImage.getBytes());
 			anime.setImageType(animeImage.getContentType());
-
-			animeService.save(anime);
 		} catch (IOException e) {
 			model.addAttribute("error", "Ocorreu um erro com o upload da imagem, tente novamente.");
 			return this.animeRegistrationScreen(anime, model);
@@ -245,5 +245,55 @@ public class AnimeController {
 		model.addAttribute("animes", animeService.findByUser(user));
 
 		return "registered-animes";
+	}
+	
+	@GetMapping("/anime/{animeId}/{interaction}")
+	public String interactionAnime(@PathVariable Long animeId, @PathVariable String interaction, Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		User user = userService.findByUsername(userDetails.getUsername());
+		Anime anime = animeService.findById(animeId);
+		
+		if ( anime == null ) {
+			model.addAttribute("errorMessage", "Anime não encontrado.");
+			
+			return "error-message";
+		}
+		
+		AnimeInteractions currentInteraction = null;
+		
+		if ( interaction.equals("ja_vi") ) {
+			currentInteraction = AnimeInteractions.JA_VI;
+		} else if ( interaction.equals("estou_vendo")) {
+			currentInteraction = AnimeInteractions.ESTOU_VENDO;
+		} else if ( interaction.equals("quero_ver")) {
+			currentInteraction = AnimeInteractions.QUERO_VER;
+		}
+		
+		UserInteractionAnime userInteractionAnime = userInteractionAnimeService.findByUserAndAnime(user, anime);
+		
+		if (userInteractionAnime != null) {
+			if (userInteractionAnime.getAnimeInteractions().equals(currentInteraction)) {
+				if ( userInteractionAnime.getStatus().getValue().equals("Ativo") ) {
+					userInteractionAnime.setStatus(Status.I);
+				} else {
+					userInteractionAnime.setStatus(Status.A);
+				}
+			} else {
+				userInteractionAnime.setAnimeInteractions(currentInteraction);
+				userInteractionAnime.setStatus(Status.A);
+			}
+		} else {
+			userInteractionAnime = new UserInteractionAnime();
+			
+			userInteractionAnime.setUser(user);
+			userInteractionAnime.setAnime(anime);
+			userInteractionAnime.setAnimeInteractions(currentInteraction);
+		}
+		
+		userInteractionAnimeService.saveAndFlush(userInteractionAnime);
+		
+		return "redirect:/anime/" + animeId;
 	}
 }

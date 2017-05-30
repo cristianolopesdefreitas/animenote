@@ -7,6 +7,7 @@ import java.util.List;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -53,7 +54,7 @@ public class UserController {
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 	@GetMapping("/")
-	public String userTimeline(Model model) {
+	public String userTimeline(Model model, Pageable pageable) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
@@ -77,13 +78,13 @@ public class UserController {
 		
 		users.add(user);
 		
-		List<UserPost> posts = userPostService.findByUserInAndStatus(users, Status.A);
+		List<UserPost> posts = userPostService.findByUserInAndStatusOrderByIdDesc(users, Status.A, pageable);
 		
 		model.addAttribute("posts", posts);
 		model.addAttribute("registeredAnimesQuantity", animeService.findByUser(user).size());
 		model.addAttribute("followerQuantity", userRelationshipService.findByFollower(user).size());
 		model.addAttribute("followedQuantity", userRelationshipService.findByFollowed(user).size());
-		model.addAttribute("interactedAnimes", userInteractionAnimeService.findByUser(user).size());
+		model.addAttribute("interactedAnimes", userInteractionAnimeService.findByUserAndStatus(user, Status.A).size());
 
 		return "timeline";
 	}
@@ -196,7 +197,7 @@ public class UserController {
 	}
 	
 	@GetMapping("/meu-perfil")
-	public String viewProfile(Model model) {
+	public String viewProfile(Model model, Pageable pageable) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
@@ -220,7 +221,7 @@ public class UserController {
 		
 		users.add(user);
 		
-		List<UserPost> posts = userPostService.findByUserInAndStatus(users, Status.A);
+		List<UserPost> posts = userPostService.findByUserInAndStatusOrderByIdDesc(users, Status.A, pageable);
 		
 		model.addAttribute("posts", posts);
 		model.addAttribute("registeredAnimesQuantity", animeService.findByUser(user).size());
@@ -394,14 +395,14 @@ public class UserController {
 
 		User userLogged = userService.findByUsername(userDetails.getUsername());
 		
-		List<UserInteractionAnime> animes = userInteractionAnimeService.findByUser(user);
+		List<UserInteractionAnime> animes = userInteractionAnimeService.findByUserAndStatus(user, Status.A);
 		
-		model.addAttribute("animes", animes);
+		model.addAttribute("interacted", animes);
 		
 		model.addAttribute("size", animes.size());
 		
 		model.addAttribute("user", userLogged);
 		
-		return "registered-animes";
+		return "interected-animes";
 	}
 }

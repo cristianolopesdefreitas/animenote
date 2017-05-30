@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.transaction.Transactional;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +18,7 @@ import br.com.animenote.model.UserPost;
 @Repository
 public interface UserPostRepository extends JpaRepository<UserPost, Long> {
 	
-	List<UserPost> findByUserInAndStatus(List<User> users, Status status);
+	List<UserPost> findByUserInAndStatusOrderByIdDesc(List<User> users, Status status, Pageable pageable);
 	
 	List<UserPost> findByUserAndStatus(User user, Status status);
 	

@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import br.com.animenote.constants.Status;
@@ -61,7 +62,9 @@ public class UserPostRepositoryTest extends AbstractTest {
 		
 		users.add(user);
 		
-		List<UserPost> posts = userPostRepository.findByUserInAndStatus(users, Status.A);
+		Pageable pageable = null;
+		
+		List<UserPost> posts = userPostRepository.findByUserInAndStatusOrderByIdDesc(users, Status.A, pageable);
 		
 		LOGGER.info(posts);
 	}

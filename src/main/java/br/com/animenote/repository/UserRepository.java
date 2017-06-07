@@ -1,6 +1,7 @@
 package br.com.animenote.repository;
 
 import java.util.Calendar;
+import java.util.List;
 
 import javax.transaction.Transactional;
 
@@ -20,6 +21,8 @@ public interface UserRepository extends JpaRepository<User, Long> {
 	User findById(Long id);
 	
 	User findByEmail(String email);
+	
+	List<User> findByNameContaining(String name);
 
 	@Modifying
 	@Transactional

@@ -17,4 +17,6 @@ public interface AnimeRepository extends JpaRepository<Anime, Long> {
 	
 	@Query(value = "SELECT a FROM Anime a WHERE a.status = 'A' AND a.name LIKE %:name%")
 	List<Anime> search(String name);
+	
+	List<Anime> findByNameContaining(String name);
 }

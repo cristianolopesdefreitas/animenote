@@ -33,4 +33,8 @@ public class AnimeService {
 	public List<Anime> findByUser(User user) {
 		return animeRepository.findByUser(user);
 	}
+	
+	public List<Anime> findByNameContaining(String name) {
+		return animeRepository.findByNameContaining(name);
+	}
 }

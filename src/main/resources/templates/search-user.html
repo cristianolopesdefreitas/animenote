@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Buscar Usuário')"></head>
+<body>
+    <header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-info" th:if="${#lists.size(users) == 0}">Não foram encontrados usuários para a busca: <span th:text="${name}"></span></div>
+
+                    <h3 th:if="${#lists.size(users) > 0}">Resultados para a busca: <span th:text="${name}"></span></h3>
+                    <div class="list-group" th:if="${#lists.size(users) > 0}">
+                        <a th:href="${'usuario/' + user.username}" class="list-group-item text-center" th:each="user : ${users}" th:text="${user.name}"></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

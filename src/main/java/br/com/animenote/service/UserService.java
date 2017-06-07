@@ -3,6 +3,7 @@ package br.com.animenote.service;
 import java.io.UnsupportedEncodingException;
 import java.util.Calendar;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.InternetAddress;
@@ -179,6 +180,10 @@ public class UserService {
 	
 	public User findByEmail(String email) {
 		return userRepository.findByEmail(email);
+	}
+	
+	public List<User> findByNameContaining(String name) {
+		return userRepository.findByNameContaining(name);
 	}
 
 }

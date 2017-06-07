@@ -57,12 +57,12 @@
 
 					<form th:action="${'/busca'}" method="GET" class="navbar-form navbar-left">
 						<div class="form-group">
-							<input type="text" name="palavra" class="form-control" placeholder="busca" />
+							<input type="text" name="name" class="form-control" placeholder="busca" />
 						</div>
 						<div class="form-group">
-							<select name="filtro" class="form-control">
-								<option value="animes">Animes</option>
-								<option value="pessoas">Pessoas</option>
+							<select name="filter" class="form-control">
+								<option value="anime">Animes</option>
+								<option value="user">Pessoas</option>
 							</select>
 						</div>
 						<button type="submit" class="btn btn-default">Buscar</button>

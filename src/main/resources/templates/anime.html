@@ -12,8 +12,8 @@
 						<img th:src="${animeImage}" th:alt="${anime.name}" class="img-responsive" />
 
 						<hr />
-						
-						<div class="list-group">
+
+						<div class="list-group" ng:if="${anime.status == 'A'}">
 	                        <a th:href="${'/anime/' + anime.id + '/ja_vi'}" class="list-group-item text-center" th:classappend="${#strings.toString(userInteraction) == 'JA_VI'} ? list-group-item-success : ''">Já vi</a>
 	                        <a th:href="${'/anime/' + anime.id + '/estou_vendo'}" class="list-group-item text-center" th:classappend="${#strings.toString(userInteraction) == 'ESTOU_VENDO'} ? list-group-item-success : ''">Estou vendo</a>
 	                        <a th:href="${'/anime/' + anime.id + '/quero_ver'}" class="list-group-item text-center" th:classappend="${#strings.toString(userInteraction) == 'QUERO_VER'} ? list-group-item-success : ''">Quero ver</a>

@@ -2,6 +2,7 @@ package br.com.animenote.controller;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -23,6 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import br.com.animenote.constants.Status;
 import br.com.animenote.model.Anime;
+import br.com.animenote.model.Role;
 import br.com.animenote.model.User;
 import br.com.animenote.model.UserInteractionAnime;
 import br.com.animenote.model.UserPost;
@@ -52,13 +54,32 @@ public class UserController {
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
-
-	@GetMapping("/")
-	public String userTimeline(Model model, Pageable pageable) {
+	
+	private User getLoggedUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
-		User user = userService.findByUsername(userDetails.getUsername());
+		return userService.findByUsername(userDetails.getUsername());
+	}
+	
+	private boolean isAdmin() {
+		User user = getLoggedUser();
+		
+		for (Iterator<Role> iterator = user.getRoles().iterator(); iterator.hasNext();) {
+			if ( "ADMIN".equals(iterator.next().getName()) ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	@GetMapping("/")
+	public String userTimeline(Model model, Pageable pageable) {
+		User user = getLoggedUser();
+		
+		model.addAttribute("loggedUser", user);
+		
 		Long userLoggedId = user.getId();
 		
 		model.addAttribute("userLoggedId", userLoggedId);

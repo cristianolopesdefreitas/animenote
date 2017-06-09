@@ -45,6 +45,13 @@ public class AnimeController {
 
 	@Autowired
 	private UserInteractionAnimeService userInteractionAnimeService;
+	
+	private User getLoggedUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		return userService.findByUsername(userDetails.getUsername());
+	}
 
 	@GetMapping("/animes")
 	public String findAll(Model model) {
@@ -67,10 +74,7 @@ public class AnimeController {
 			model.addAttribute("message", "Anime não encontrado.");
 		}
 
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		UserDetails userDetails = (UserDetails) auth.getPrincipal();
-
-		User user = userService.findByUsername(userDetails.getUsername());
+		User user = getLoggedUser();
 
 		UserInteractionAnime interaction = userInteractionAnimeService.findByUserAndAnimeAndStatus(user, anime, Status.A);
 
@@ -79,6 +83,8 @@ public class AnimeController {
 		} else {
 			model.addAttribute("userInteraction", "");
 		}
+		
+		model.addAttribute("loggedUser", user);
 
 		return "anime";
 	}
@@ -170,6 +176,7 @@ public class AnimeController {
 			anime.setUser(user);
 			anime.setImage(savedAnime.getImage());
 			anime.setImageType(savedAnime.getImageType());
+			anime.setStatus(Status.I);
 			animeService.save(anime);
 			model.addAttribute("success", "O anime foi editado com sucesso!");
 		} else {

@@ -16,4 +16,12 @@ public class AnimeCategoryService {
 	public List<AnimeCategory> findAll() {
 		return animeCategoryRepository.findAll();
 	}
+	
+	public AnimeCategory findOne(Long id) {
+		return animeCategoryRepository.findOne(id);
+	}
+	
+	public AnimeCategory saveAndFlush(AnimeCategory animeCategory) {
+		return animeCategoryRepository.saveAndFlush(animeCategory);
+	}
 }

@@ -79,6 +79,7 @@ public class UserController {
 		User user = getLoggedUser();
 		
 		model.addAttribute("loggedUser", user);
+		model.addAttribute("isAdmin", isAdmin());
 		
 		Long userLoggedId = user.getId();
 		
@@ -112,6 +113,8 @@ public class UserController {
 
 	@GetMapping("/minhas-informacoes")
 	public String userInformations(User user, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -125,6 +128,9 @@ public class UserController {
 
 	@PostMapping("/minhas-informacoes")
 	public String UpdateUserInformations(@Valid User user, BindingResult result, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		if (result.hasErrors()) {
 			return this.userInformations(user, model);
 		}
@@ -142,11 +148,16 @@ public class UserController {
 
 	@GetMapping("/atualizar-avatar")
 	public String updateUserAvatar(Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		return "avatar-upload";
 	}
 
 	@PostMapping("/atualizar-avatar")
 	public String save(@RequestParam("avatar") MultipartFile avatar, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
 
 		if (avatar.isEmpty() || avatar.getSize() == 0) {
 			model.addAttribute("error", "Por favor insira uma imagem.");
@@ -183,6 +194,9 @@ public class UserController {
 
 	@GetMapping("/alterar-senha")
 	public String changePasswordScreen(Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		return "change-password";
 	}
 
@@ -190,6 +204,8 @@ public class UserController {
 	public String changePasswordSave(@RequestParam("password") String password,
 			@RequestParam("newPassword") String newPassword,
 			@RequestParam("newPasswordConfirmation") String newPasswordConfirmation, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -219,6 +235,9 @@ public class UserController {
 	
 	@GetMapping("/meu-perfil")
 	public String viewProfile(Model model, Pageable pageable) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
@@ -254,6 +273,9 @@ public class UserController {
 	
 	@GetMapping("/usuario/{username}")
 	public String viewUser(@PathVariable String username, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
@@ -301,6 +323,9 @@ public class UserController {
 	
 	@GetMapping("/usuario/{username}/{action}")
 	public String followOrUnfollow(@PathVariable String username, @PathVariable String action, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
@@ -339,6 +364,9 @@ public class UserController {
 	
 	@GetMapping("/usuario/{username}/seguidos")
 	public String viewFollowed(@PathVariable String username, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		User user = userService.findByUsername(username);
 		
 		if ( user == null ) {
@@ -358,6 +386,9 @@ public class UserController {
 	
 	@GetMapping("/usuario/{username}/seguidores")
 	public String viewFollower(@PathVariable String username, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		User user = userService.findByUsername(username);
 		
 		if ( user == null ) {
@@ -377,6 +408,9 @@ public class UserController {
 	
 	@GetMapping("/usuario/{username}/cadastros")
 	public String viewRegisteredAnimes(@PathVariable String username, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		User user = userService.findByUsername(username);
 		
 		if ( user == null ) {
@@ -403,6 +437,9 @@ public class UserController {
 	
 	@GetMapping("/usuario/{username}/interagidos")
 	public String viewInteractedAnimes(@PathVariable String username, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		User user = userService.findByUsername(username);
 		
 		if ( user == null ) {

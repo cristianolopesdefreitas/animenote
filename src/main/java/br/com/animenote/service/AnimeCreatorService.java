@@ -20,4 +20,12 @@ public class AnimeCreatorService {
 	public AnimeCreator findById(Long id) {
 		return animeCreatorRepository.findById(id);
 	}
+	
+	public AnimeCreator findOne(Long id) {
+		return animeCreatorRepository.findOne(id);
+	}
+	
+	public AnimeCreator saveAndFlush(AnimeCreator animeCreator) {
+		return animeCreatorRepository.saveAndFlush(animeCreator);
+	}
 }

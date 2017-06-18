@@ -2,6 +2,7 @@ package br.com.animenote.controller;
 
 import java.util.Base64;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.animenote.constants.Status;
 import br.com.animenote.constants.UserPostInteractions;
+import br.com.animenote.model.Role;
 import br.com.animenote.model.User;
 import br.com.animenote.model.UserInteractionPost;
 import br.com.animenote.model.UserPost;
@@ -53,9 +55,31 @@ public class UserPostController {
 
 	@Autowired
 	private UserInteractionPostService userInteractionPostService;
+	
+	private User getLoggedUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		UserDetails userDetails = (UserDetails) auth.getPrincipal();
+
+		return userService.findByUsername(userDetails.getUsername());
+	}
+	
+	private boolean isAdmin() {
+		User user = getLoggedUser();
+		
+		for (Iterator<Role> iterator = user.getRoles().iterator(); iterator.hasNext();) {
+			if ( "ADMIN".equals(iterator.next().getName()) ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	@GetMapping("/postagem")
 	public String writePost(UserPost userPost, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		model.addAttribute("userPost", userPost);
 
 		return "post-registration";
@@ -63,6 +87,9 @@ public class UserPostController {
 
 	@PostMapping("/postagem")
 	public String savePost(@Valid UserPost userPost, BindingResult result, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		if (result.hasErrors()) {
 			return this.writePost(userPost, model);
 		}
@@ -82,8 +109,14 @@ public class UserPostController {
 
 	@GetMapping("/visualizar-postagem/{id}")
 	public String viewPost(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		UserPost userPost = userPostService.findById(id);
 		String avatar = null;
+		
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
 
 		if (userPost != null) {
 			if (userPost.getUser().getAvatar() != null) {
@@ -118,6 +151,9 @@ public class UserPostController {
 	@PostMapping("/visualizar-postagem")
 	public String savePostComment(@Valid UserPostComment userPostComment, @RequestParam("postId") Long postId,
 			BindingResult result, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		if (result.hasErrors()) {
 			return "redirect:/visualizar-postagem/" + postId;
 		}
@@ -138,6 +174,9 @@ public class UserPostController {
 
 	@GetMapping("/excluir-postagem/{id}")
 	public String deletePost(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		UserPost userPost = userPostService.findById(id);
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -156,6 +195,9 @@ public class UserPostController {
 
 	@GetMapping("/editar-postagem/{id}")
 	public String editPost(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
@@ -173,12 +215,18 @@ public class UserPostController {
 
 	@GetMapping("/denunciar-postagem/{id}")
 	public String viewReportPost(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		model.addAttribute("formAction", "/denunciar-postagem");
 		return "report";
 	}
 
 	@GetMapping("/denunciar-postagem/{id}/{status}")
 	public String viewReportPostResult(@PathVariable Long id, @PathVariable String status, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		if (status.equals("error")) {
 			model.addAttribute("error", "Ocorreu um erro, não foi possível fazer a denúncia.");
 		} else if (status.equals("success")) {
@@ -192,6 +240,9 @@ public class UserPostController {
 
 	@PostMapping("/denunciar-postagem")
 	public String reportPost(@RequestParam("id") Long id, @RequestParam("report") String report, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		if (id == null || report.isEmpty()) {
 			return "redirect:/denunciar-postagem/" + id + "/error";
 		}
@@ -224,12 +275,18 @@ public class UserPostController {
 
 	@GetMapping("/denunciar-comentario/{id}")
 	public String viewReportPostComment(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		model.addAttribute("formAction", "/denunciar-comentario");
 		return "report";
 	}
 
 	@GetMapping("/denunciar-comentario/{id}/{status}")
 	public String viewReportPostComment(@PathVariable Long id, @PathVariable String status, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		if (status.equals("error")) {
 			model.addAttribute("error", "Ocorreu um erro, não foi possível fazer a denúncia.");
 		} else if (status.equals("success")) {
@@ -243,6 +300,9 @@ public class UserPostController {
 
 	@PostMapping("/denunciar-comentario")
 	public String reportPostComment(@RequestParam("id") Long id, @RequestParam("report") String report, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		if (id == null || report.isEmpty()) {
 			return "redirect:/denunciar-comentario/" + id + "/error";
 		}
@@ -275,6 +335,9 @@ public class UserPostController {
 
 	@GetMapping("/interagir-com-postagem/{id}/{interaction}")
 	public String interactionPost(@PathVariable Long id, @PathVariable String interaction, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 

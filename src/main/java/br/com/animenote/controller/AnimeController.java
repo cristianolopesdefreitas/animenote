@@ -2,6 +2,7 @@ package br.com.animenote.controller;
 
 import java.io.IOException;
 import java.util.Base64;
+import java.util.Iterator;
 
 import javax.validation.Valid;
 
@@ -21,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import br.com.animenote.constants.AnimeInteractions;
 import br.com.animenote.constants.Status;
 import br.com.animenote.model.Anime;
+import br.com.animenote.model.Role;
 import br.com.animenote.model.User;
 import br.com.animenote.model.UserInteractionAnime;
 import br.com.animenote.service.AnimeCategoryService;
@@ -52,9 +54,24 @@ public class AnimeController {
 
 		return userService.findByUsername(userDetails.getUsername());
 	}
+	
+	private boolean isAdmin() {
+		User user = getLoggedUser();
+		
+		for (Iterator<Role> iterator = user.getRoles().iterator(); iterator.hasNext();) {
+			if ( "ADMIN".equals(iterator.next().getName()) ) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
 
 	@GetMapping("/animes")
 	public String findAll(Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		model.addAttribute("animes", animeService.findAll());
 
 		return "animes";
@@ -62,6 +79,9 @@ public class AnimeController {
 
 	@GetMapping("/anime/{id}")
 	public String showAnime(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Anime anime = animeService.findById(id);
 
 		if (anime != null) {
@@ -91,6 +111,9 @@ public class AnimeController {
 
 	@GetMapping("/cadastrar-anime")
 	public String animeRegistrationScreen(Anime anime, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		model.addAttribute("anime", anime);
 		model.addAttribute("animeCategories", animeCategoryService.findAll());
 		model.addAttribute("animeCreators", animeCreatorService.findAll());
@@ -101,6 +124,8 @@ public class AnimeController {
 	@PostMapping("/cadastrar-anime")
 	public String animeRegistration(@Valid Anime anime, BindingResult result,
 			@RequestParam("animeImage") MultipartFile animeImage, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
 		
 		if (animeImage.isEmpty() || animeImage.getSize() == 0) {
 			model.addAttribute("error", "Por favor insira uma imagem.");
@@ -145,6 +170,9 @@ public class AnimeController {
 
 	@GetMapping("/editar-anime/{id}")
 	public String editAnimeScreen(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Anime anime = animeService.findById(id);
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -165,6 +193,9 @@ public class AnimeController {
 
 	@PostMapping("/editar-anime/{id}")
 	public String editAnime(@Valid Anime anime, BindingResult result, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Anime savedAnime = animeService.findById(anime.getId());
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -188,6 +219,9 @@ public class AnimeController {
 
 	@GetMapping("/alterar-imagem-anime/{id}")
 	public String changeAnimeImageScreen(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Anime anime = animeService.findById(id);
 
 		if (anime != null) {
@@ -202,6 +236,9 @@ public class AnimeController {
 	@PostMapping("/alterar-imagem-anime/{id}")
 	public String changeAnimeImage(@PathVariable Long id, @RequestParam("animeImage") MultipartFile animeImage,
 			Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Anime savedAnime = animeService.findById(id);
 
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -243,6 +280,9 @@ public class AnimeController {
 
 	@GetMapping("/animes-cadastrados")
 	public String add(Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 
@@ -256,6 +296,9 @@ public class AnimeController {
 	
 	@GetMapping("/anime/{animeId}/{interaction}")
 	public String interactionAnime(@PathVariable Long animeId, @PathVariable String interaction, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		UserDetails userDetails = (UserDetails) auth.getPrincipal();
 

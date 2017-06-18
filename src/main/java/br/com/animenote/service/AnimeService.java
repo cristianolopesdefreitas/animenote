@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.animenote.constants.Status;
 import br.com.animenote.model.Anime;
 import br.com.animenote.model.User;
 import br.com.animenote.repository.AnimeRepository;
@@ -36,5 +37,9 @@ public class AnimeService {
 	
 	public List<Anime> findByNameContaining(String name) {
 		return animeRepository.findByNameContaining(name);
+	}
+	
+	public List<Anime> findByStatus(Status status) {
+		return animeRepository.findByStatus(status);
 	}
 }

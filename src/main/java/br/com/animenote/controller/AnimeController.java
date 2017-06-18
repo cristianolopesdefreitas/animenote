@@ -346,4 +346,24 @@ public class AnimeController {
 		
 		return "redirect:/anime/" + animeId;
 	}
+	
+	@GetMapping("/administracao/moderar-animes")
+	public String moderateAnime(Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("animes", animeService.findByStatus(Status.I));
+		
+		return "moderate-anime";
+	}
+	
+	@GetMapping("/administracao/moderar-animes/{id}")
+	public String saveModerateAnime(@PathVariable Long id, Model model) {
+		Anime anime = animeService.findById(id);
+		
+		anime.setStatus(Status.A);
+		
+		animeService.save(anime);
+		return "redirect:/administracao/moderar-animes";
+	}
 }

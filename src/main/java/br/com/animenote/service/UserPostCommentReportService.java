@@ -1,5 +1,7 @@
 package br.com.animenote.service;
 
+import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,5 +19,9 @@ public class UserPostCommentReportService {
 	public UserPostCommentReport saveAndFlush(UserPostCommentReport userPostCommentReport) {
 		LOGGER.info("Salvando denúncia de comentário");
 		return userPostCommentReportRepository.saveAndFlush(userPostCommentReport);
+	}
+	
+	public List<UserPostCommentReport> findAll() {
+		return userPostCommentReportRepository.findAll();
 	}
 }

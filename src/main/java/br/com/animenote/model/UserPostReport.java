@@ -24,7 +24,7 @@ public class UserPostReport implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_post_id", nullable = false)
-    private UserPost userPostId;
+    private UserPost userPost;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_report_id", nullable = false)
@@ -54,12 +54,12 @@ public class UserPostReport implements Serializable {
 		this.report = report;
 	}
 
-	public UserPost getUserPostId() {
-		return userPostId;
+	public UserPost getUserPost() {
+		return userPost;
 	}
 
-	public void setUserPostId(UserPost userPostId) {
-		this.userPostId = userPostId;
+	public void setUserPost(UserPost userPost) {
+		this.userPost = userPost;
 	}
 	
 }

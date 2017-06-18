@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Moderação de Animes')"></head>
+<body>
+	<header th:replace="fragments/fragments :: internalHeader"></header>
+
+	<main>
+		<div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>Moderação de Animes</h2>
+                </div>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Anime</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr th:each="item : ${animes}">
+                            <td th:text="${item.id}"></td>
+                            <td th:text="${item.name}"></td>
+                            <td class="text-center">
+                                <a th:href="${'/administracao/moderar-animes/' + item.id}" class="btn btn-primary btn-xs">Liberar</a>
+                                <a th:href="${'/anime/' + item.id}" class="btn btn-primary btn-xs">Visualizar</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+		</div>
+	</main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

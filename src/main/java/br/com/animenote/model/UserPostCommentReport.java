@@ -24,7 +24,7 @@ public class UserPostCommentReport implements Serializable {
 	
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_post_comment_id", nullable = false)
-    private UserPostComment userPostCommentId;
+    private UserPostComment userPostComment;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_report_id", nullable = false)
@@ -54,12 +54,12 @@ public class UserPostCommentReport implements Serializable {
 		this.report = report;
 	}
 
-	public UserPostComment getUserPostCommentId() {
-		return userPostCommentId;
+	public UserPostComment getUserPostComment() {
+		return userPostComment;
 	}
 
-	public void setUserPostCommentId(UserPostComment userPostCommentId) {
-		this.userPostCommentId = userPostCommentId;
+	public void setUserPostComment(UserPostComment userPostComment) {
+		this.userPostComment = userPostComment;
 	}
 	
 }

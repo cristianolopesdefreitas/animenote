@@ -260,7 +260,7 @@ public class UserPostController {
 
 		User user = userService.findByUsername(userDetails.getUsername());
 
-		userPostReport.setUserPostId(userPost);
+		userPostReport.setUserPost(userPost);
 		userPostReport.setReport(report);
 		userPostReport.setUserReport(user);
 
@@ -320,7 +320,7 @@ public class UserPostController {
 
 		User user = userService.findByUsername(userDetails.getUsername());
 
-		userPostCommentReport.setUserPostCommentId(userPostComment);
+		userPostCommentReport.setUserPostComment(userPostComment);
 		userPostCommentReport.setReport(report);
 		userPostCommentReport.setUserReport(user);
 
@@ -390,5 +390,53 @@ public class UserPostController {
 		userInteractionPostService.saveAndFlush(userInteractionPost);
 
 		return "redirect:/visualizar-postagem/" + id;
+	}
+	
+	@GetMapping("/administracao/moderar-postagens")
+	public String moderatePost(Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("reports", userPostReportService.findAll());
+		
+		return "moderate-post";
+	}
+	
+	@GetMapping("/administracao/moderar-postagens/{id}")
+	public String saveModeratePost(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
+		UserPost userPost = userPostService.findById(id);
+		
+		userPost.setStatus(Status.I);
+		
+		userPostService.savePost(userPost);
+		
+		return "redirect:/administracao/moderar-postagens";
+	}
+	
+	@GetMapping("/administracao/moderar-comentarios")
+	public String moderateComments(Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("reports", userPostCommentReportService.findAll());
+		
+		return "moderate-comments";
+	}
+	
+	@GetMapping("/administracao/moderar-comentarios/{id}")
+	public String saveModerateComments(@PathVariable Long id, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
+		UserPostComment userPostComment = userPostCommentService.findById(id);
+		
+		userPostComment.setStatus(Status.I);
+		
+		userPostCommentService.savePostComment(userPostComment);
+		
+		return "redirect:/administracao/moderar-comentarios";
 	}
 }

@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import br.com.animenote.constants.Status;
 import br.com.animenote.model.Anime;
 import br.com.animenote.model.User;
 
@@ -19,4 +20,6 @@ public interface AnimeRepository extends JpaRepository<Anime, Long> {
 	List<Anime> search(String name);
 	
 	List<Anime> findByNameContaining(String name);
+	
+	List<Anime> findByStatus(Status status);
 }

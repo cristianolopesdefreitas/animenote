@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.NotBlank;
 
@@ -27,13 +28,13 @@ public class UserPrivateMessage implements Serializable {
 	private Long id;
 	
 	@Valid
-	@NotBlank
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_sender_id", nullable = false)
     private User userSender;
 	
 	@Valid
-	@NotBlank
+	@NotNull
 	@ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_receiver_id", nullable = false)
     private User userReceiver;
@@ -46,6 +47,21 @@ public class UserPrivateMessage implements Serializable {
 	@Column(nullable = false, columnDefinition = "enum('A', 'I') default 'A'")
 	@Enumerated(EnumType.STRING)
 	private Status status;
+	
+	@Column(nullable = false)
+	private Boolean administration;
+
+	public Boolean getAdministration() {
+		return administration;
+	}
+
+	public void setAdministration(Boolean administration) {
+		this.administration = administration;
+	}
+
+	public UserPrivateMessage() {
+		this.status = Status.A;
+	}
 
 	public Long getId() {
 		return id;

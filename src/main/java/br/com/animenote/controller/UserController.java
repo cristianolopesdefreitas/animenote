@@ -28,10 +28,12 @@ import br.com.animenote.model.Role;
 import br.com.animenote.model.User;
 import br.com.animenote.model.UserInteractionAnime;
 import br.com.animenote.model.UserPost;
+import br.com.animenote.model.UserPrivateMessage;
 import br.com.animenote.model.UserRelationship;
 import br.com.animenote.service.AnimeService;
 import br.com.animenote.service.UserInteractionAnimeService;
 import br.com.animenote.service.UserPostService;
+import br.com.animenote.service.UserPrivateMessageService;
 import br.com.animenote.service.UserRelationshipService;
 import br.com.animenote.service.UserService;
 
@@ -51,6 +53,9 @@ public class UserController {
 	
 	@Autowired
 	UserInteractionAnimeService userInteractionAnimeService;
+	
+	@Autowired
+	UserPrivateMessageService userPrivateMessageService;
 
 	@Autowired
 	private BCryptPasswordEncoder bCryptPasswordEncoder;
@@ -107,6 +112,8 @@ public class UserController {
 		model.addAttribute("followerQuantity", userRelationshipService.findByFollower(user).size());
 		model.addAttribute("followedQuantity", userRelationshipService.findByFollowed(user).size());
 		model.addAttribute("interactedAnimes", userInteractionAnimeService.findByUserAndStatus(user, Status.A).size());
+		model.addAttribute("messageReceiverNumber", userPrivateMessageService.findByUserReceiverAndStatusOrderByIdDesc(user, Status.A).size());
+		model.addAttribute("messageSentNumber", userPrivateMessageService.findByUserSenderAndStatusOrderByIdDesc(user, Status.A).size());
 
 		return "timeline";
 	}
@@ -462,5 +469,161 @@ public class UserController {
 		model.addAttribute("user", userLogged);
 		
 		return "interected-animes";
+	}
+	
+	@GetMapping("/mensagem/{username}")
+	public String sendMessage(@PathVariable String username, Model model) {
+		User userReceiver = userService.findByUsername(username);
+		
+		if (userReceiver == null) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+		
+		User loggedUser = getLoggedUser();
+		
+		model.addAttribute("loggedUser", loggedUser);
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("action", "/mensagem/" + username);
+		
+		return "message";
+	}
+	
+	@PostMapping("/mensagem/{username}")
+	public String saveMessage(@PathVariable("username") String username, @RequestParam("message") String message, Model model) {
+		User userReceiver = userService.findByUsername(username);
+		
+		if (userReceiver == null) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+		
+		if (message == null) {
+			model.addAttribute("error", "O campo mensagem é obrigatório.");
+			
+			return "message";
+		}
+		
+		User loggedUser = getLoggedUser();
+		
+		model.addAttribute("loggedUser", loggedUser);
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("action", "/mensagem/" + username);
+		
+		UserPrivateMessage userPrivateMessage = new UserPrivateMessage();
+		
+		userPrivateMessage.setUserSender(loggedUser);
+		userPrivateMessage.setUserReceiver(userReceiver);
+		userPrivateMessage.setMessage(message);
+		userPrivateMessage.setAdministration(false);
+		
+		userPrivateMessageService.saveAndFlush(userPrivateMessage);
+		
+		return "redirect:/usuario/" + username;
+	}
+	
+	@GetMapping("/administracao/mensagem/{username}")
+	public String sendModerateMessage(@PathVariable String username, Model model) {
+		model.addAttribute("loggedUser", getLoggedUser());
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("action", "/administracao/mensagem/" + username);
+		
+		return "message";
+	}
+	
+	@PostMapping("/administracao/mensagem/{username}")
+	public String saveModerateMessage(@PathVariable("username") String username, @RequestParam("message") String message, Model model) {
+		User userReceiver = userService.findByUsername(username);
+		
+		if (userReceiver == null) {
+			model.addAttribute("errorMessage", "Usuário não encontrado.");
+			
+			return "error-message";
+		}
+		
+		if (message == null) {
+			model.addAttribute("error", "O campo mensagem é obrigatório.");
+			
+			return "message";
+		}
+		
+		User loggedUser = getLoggedUser();
+		
+		model.addAttribute("loggedUser", loggedUser);
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("action", "/mensagem/" + username);
+		
+		UserPrivateMessage userPrivateMessage = new UserPrivateMessage();
+		
+		userPrivateMessage.setUserSender(loggedUser);
+		userPrivateMessage.setUserReceiver(userReceiver);
+		userPrivateMessage.setMessage(message);
+		userPrivateMessage.setAdministration(true);
+		
+		userPrivateMessageService.saveAndFlush(userPrivateMessage);
+		
+		return "redirect:/usuario/" + username;
+	}
+	
+	@GetMapping("/mensagens")
+	public String viewMessages(Model model) {
+		User loggedUser = getLoggedUser();
+		
+		model.addAttribute("loggedUser", loggedUser);
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("messages", userPrivateMessageService.findByUserReceiverAndStatusOrderByIdDesc(loggedUser, Status.A));
+		
+		return "messages";
+	}
+	
+	@GetMapping("/mensagens/{id}")
+	public String deleteMessage(@PathVariable("id") Long id, Model model) {
+		User loggedUser = getLoggedUser();
+		
+		model.addAttribute("loggedUser", loggedUser);
+		model.addAttribute("isAdmin", isAdmin());
+		
+		UserPrivateMessage userPrivateMessage = userPrivateMessageService.findByUserReceiverAndId(loggedUser, id);
+		
+		if (userPrivateMessage != null) {
+			userPrivateMessage.setStatus(Status.I);
+			userPrivateMessageService.saveAndFlush(userPrivateMessage);
+		}
+		return "redirect:/mensagens";
+	}
+	
+	@GetMapping("/mensagens-enviadas")
+	public String sentMessages(Model model) {
+		User loggedUser = getLoggedUser();
+		
+		model.addAttribute("loggedUser", loggedUser);
+		model.addAttribute("isAdmin", isAdmin());
+		
+		model.addAttribute("messages", userPrivateMessageService.findByUserSenderAndStatusOrderByIdDesc(loggedUser, Status.A));
+		
+		return "messages-sent";
+	}
+	
+	@GetMapping("/mensagens-enviadas/{id}")
+	public String deleteSentMessage(@PathVariable("id") Long id, Model model) {
+		User loggedUser = getLoggedUser();
+		
+		model.addAttribute("loggedUser", loggedUser);
+		model.addAttribute("isAdmin", isAdmin());
+		
+		UserPrivateMessage userPrivateMessage = userPrivateMessageService.findByUserSenderAndId(loggedUser, id);
+		
+		if (userPrivateMessage != null) {
+			userPrivateMessage.setStatus(Status.I);
+			userPrivateMessageService.saveAndFlush(userPrivateMessage);
+		}
+		return "redirect:/mensagens-enviadas";
 	}
 }

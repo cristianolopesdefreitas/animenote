@@ -20,6 +20,19 @@
                             <i class="glyphicon glyphicon-pencil"></i> Escrever Postagem
                         </a>
                     </div>
+
+                    <div class="list-group" th:if="${user.id != userLoggedId}">
+                        <a th:href="${'/mensagem/' + user.username}" class="list-group-item list-group-item-success text-center">
+                            <i class="glyphicon glyphicon-envelope"></i> Enviar Mensagem
+                        </a>
+                    </div>
+
+                    <div class="list-group" th:if="${user.id != userLoggedId AND isAdmin}">
+                        <a th:href="${'/administracao/mensagem/' + user.username}" class="list-group-item list-group-item-success text-center">
+                            <i class="glyphicon glyphicon-envelope"></i> Enviar Mensagem da Moderação
+                        </a>
+                    </div>
+
                     <div class="list-group" th:if="${user.id != userLoggedId}">
                         <a th:href="${'/usuario/' + user.username + '/follow'}" class="list-group-item list-group-item-success text-center" th:if="${!follow}">
                             <i class="glyphicon glyphicon-ok-sign"></i> Seguir
@@ -40,6 +53,12 @@
                         </a>
                         <a th:href="${'/usuario/' + user.username + '/interagidos'}" class="list-group-item">
                             <span class="badge" th:text="${interactedAnimes}"></span>Animes Interagidos
+                        </a>
+                        <a th:href="${'/mensagens-enviadas'}" class="list-group-item" th:if="${user.id == userLoggedId}">
+                            <span class="badge" th:text="${messageSentNumber}"></span>Mensagens Enviadas
+                        </a>
+                        <a th:href="${'/mensagens'}" class="list-group-item" th:if="${user.id == userLoggedId}">
+                            <span class="badge" th:text="${messageReceiverNumber}"></span>Mensagens Recebidas
                         </a>
                     </div>
                 </div>

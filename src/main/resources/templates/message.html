@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Enviar Mensagem')"></head>
+<body>
+    <header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container">
+			<div class="row">
+				<div class="col-xs-12">
+                    <form th:action="${action}" method="POST" novalidate="novalidate">
+                        <div class="alert alert-danger text-center" th:if="${error}" th:text="${error}"></div>
+						<div class="alert alert-success text-center" th:if="${success}" th:text="${success}"></div>
+
+                        <div class="form-group">
+                            <label for="message">Mensagem:</label>
+                            <textarea name="message" id="message" class="form-control" required="required"></textarea>
+                        </div>
+                        <input type="hidden" name="username" th:value="${username}" />
+                        <button type="submit" class="btn btn-primary btn-block">Enviar Mensagem</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

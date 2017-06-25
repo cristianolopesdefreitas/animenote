@@ -185,5 +185,9 @@ public class UserService {
 	public List<User> findByNameContaining(String name) {
 		return userRepository.findByNameContaining(name);
 	}
+	
+	public List<User> findAll() {
+		return userRepository.findAll();
+	}
 
 }

@@ -65,6 +65,11 @@ public class AnimeCreatorController {
 			return this.viewCreators(animeCreator, model);
 		}
 		
+		if ( animeCreator.getName().equals("") ) {
+			model.addAttribute("error", "O nome do criador é obrigatório.");
+			return this.viewCreators(animeCreator, model);
+		}
+		
 		animeCreatorService.saveAndFlush( animeCreator );
 		
 		return "redirect:/administracao/criadores";

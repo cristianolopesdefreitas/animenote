@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head th:replace="fragments/fragments :: head (title = 'Números')"></head>
+<body>
+    <header th:replace="fragments/fragments :: internalHeader"></header>
+
+    <main>
+        <div class="container" th:if="${isAdmin}">
+            <div class="row">
+                <div class="col-xs-12">
+                    <h2>Números da Rede</h2>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well">
+                        <h3 class="text-center">Usuários Cadastrados</h3>
+                        <h4 class="text-center" th:text="${userNumbers}"></h4>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well">
+                        <h3 class="text-center">Postagens Realizadas</h3>
+                        <h4 class="text-center" th:text="${postNumbers}"></h4>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <div class="well">
+                        <h3 class="text-center">Animes Cadastrados</h3>
+                        <h4 class="text-center" th:text="${animeNumbers}"></h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container" th:if="${!isAdmin}">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="alert alert-warning text-center">Você não tem permissão aqui.</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+	<footer th:replace="fragments/fragments :: footer"></footer>
+</body>
+</html>

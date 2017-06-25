@@ -65,6 +65,11 @@ public class AnimeCategoryController {
 			return this.viewCategories(animeCategory, model);
 		}
 		
+		if ( animeCategory.getCategory().equals("") ) {
+			model.addAttribute("error", "A categoria é obrigatória.");
+			return this.viewCategories(animeCategory, model);
+		}
+		
 		animeCategoryService.saveAndFlush( animeCategory );
 		
 		return "redirect:/administracao/categorias";

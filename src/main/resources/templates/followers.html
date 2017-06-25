@@ -8,15 +8,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-xs-12">
-                    <div class="alert alert-warning text-center" th:if="${size == 0}">Nenhum seguidor encontrado.</div>
+                    <h2>Seus seguidores</h2>
                 </div>
-                <div class="col-xs-12 col-sm-3" th:if="${followers != null}" th:each="user : ${followers}">
-                    <div class="panel panel-default">
-                        <div class="panel-body">
-                            <strong class="center-block text-center">
-                                <a th:href="${'/usuario/' + user.follower.username}" th:text="${user.follower.name}"></a>
-                            </strong>
-                        </div>
+                <div class="col-xs-12">
+                    <div class="alert alert-warning text-center" th:if="${size == 0}">Ninguém está seguindo você :(.</div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="list-group">
+                        <a th:href="${'/usuario/' + user.follower.username}" class="list-group-item text-center" th:if="${followers != null}" th:each="user : ${followers}" th:text="${user.follower.name}"></a>
                     </div>
                 </div>
             </div>

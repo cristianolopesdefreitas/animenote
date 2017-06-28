@@ -28,7 +28,7 @@ public class UserPost extends BaseEntity<Long> {
 	}
 	
 	@NotEmpty
-	@Column(nullable = false, columnDefinition = "text")
+	@Column(nullable = false, columnDefinition = "longtext")
 	private String post;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
